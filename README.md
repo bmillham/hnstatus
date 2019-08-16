@@ -4,7 +4,7 @@ hnstatus
 hnstatus reads usage information from a HughesNet Gen5 modem and summarises it in a nice simple GUI. If the appropriate Python libraries are installed it will also display a StatusIcon to give you the modems current status at a glance.
 -------------------------------------------------------------------------------------
 
-###hnstatus is for users of HughesNet Gen5.
+###hnstatus is for users of HughesNet. It's been tested with an HT2000W modem.
 
 hnstatus is written in Python3 with no support for Python2.
 
