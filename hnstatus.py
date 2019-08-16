@@ -15,15 +15,11 @@ if __name__ == '__main__':
     # Get the directory of this file
     dir_path = os.path.dirname(os.path.realpath(__file__))
     glade_file = os.path.join(dir_path, 'hnstatus.glade')
-    icon_cache = os.path.join('/run/user', str(os.getuid()), 'icon_cache')
-    if not os.path.exists(icon_cache):
-        os.mkdir(icon_cache)
 
     # Build the GUI
     gui = HnGui(path=dir_path,
                 file=glade_file,
-                hnstat=hn,
-                icon_cache=icon_cache)
+                hnstat=hn)
 
     # Display the GUI
     gui.window1.show_all()
