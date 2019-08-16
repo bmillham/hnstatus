@@ -28,43 +28,6 @@ Author: Brian Millham
   <!-- interface-description Get usage status from a HughesNet Modem -->
   <!-- interface-copyright 2017 -->
   <!-- interface-authors Brian Millham -->
-  <object class="GtkAboutDialog" id="abouthnstatus">
-    <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="window_position">center</property>
-    <property name="type_hint">dialog</property>
-    <property name="deletable">False</property>
-    <property name="program_name">hnstatus</property>
-    <property name="version">0.1</property>
-    <property name="copyright" translatable="yes">(C) 2019 Brian Millham</property>
-    <property name="authors">Brian Millham</property>
-    <property name="logo">resources/icons/hnmodem.png</property>
-    <property name="license_type">gpl-2-0</property>
-    <child>
-      <placeholder/>
-    </child>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="abouthnstatus-vbox1">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="abouthnstatus-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-  </object>
   <object class="GtkImage" id="down_off">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -465,6 +428,46 @@ Author: Brian Millham
             <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAboutDialog" id="abouthnstatus">
+    <property name="can_focus">False</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center</property>
+    <property name="type_hint">dialog</property>
+    <property name="deletable">False</property>
+    <property name="transient_for">window1</property>
+    <property name="program_name">hnstatus</property>
+    <property name="version">0.1</property>
+    <property name="copyright" translatable="yes">(C) 2019 Brian Millham</property>
+    <property name="authors">Brian Millham</property>
+    <property name="logo">resources/icons/hnmodem.png</property>
+    <property name="license_type">gpl-2-0</property>
+    <signal name="response" handler="about-close-handler" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="abouthnstatus-vbox1">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="abouthnstatus-action_area1">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>

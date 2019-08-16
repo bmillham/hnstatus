@@ -25,6 +25,7 @@ class HnGui():
             'populate': self.populate,
             'window_state_event': self.window_state_event,
             'about_item': self.about,
+            'about-close-handler': self.about_close_handler,
         }
 
         self._last_status_warning = None
@@ -93,7 +94,10 @@ class HnGui():
 
     def about(self, widget):
         self.about_window.show_all()
-        
+
+    def about_close_handler(self, widget, status):
+        self.about_window.hide()
+
     def right_click_event(self, icon, button, time):
         self.menu.show_all()
 
