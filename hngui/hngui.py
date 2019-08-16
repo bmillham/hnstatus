@@ -16,7 +16,7 @@ class HnGui():
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, path=None, file=None, hnstat=None, icon_cache=None):
+    def __init__(self, path=None, file=None, hnstat=None):
         """ Create the GUI, but do not display it """
 
         signals = {
@@ -62,9 +62,6 @@ class HnGui():
 
         self.hnstat = hnstat
         self.auto_update_source = None
-        self.icon_cache = icon_cache
-        self.icon_file_template = "b_{}_a_{}_s_{}_t_{}_r_{}.png"
-        self.last_icon = None
         self.icon = None
 
         template = ["hnStatus",
@@ -83,12 +80,12 @@ class HnGui():
         self.downicon = os.path.join(path,
                                      'resources/icons/hnmodem-down100x100.png')
         self.defaulticon = os.path.join(path,
-                                        'resouces/icons/hnmodem100x100.png')
+                                        'resources/icons/hnmodem100x100.png')
         self.statusicon = Gtk.StatusIcon()
         self.statusicon.connect("popup-menu", self.right_click_event)
         self.statusicon.connect("button-press-event", self.button_press_event)
         self.statusicon.set_tooltip_text("hnstatus")
-        self.statusicon.set_from_file(self.downicon)
+        self.statusicon.set_from_file(self.defaulticon)
 
         Notify.init('hnstatus-appindicator')
 
@@ -152,17 +149,14 @@ class HnGui():
                              width=33,
                              arrowheight=15,
                              indicator=self.statusicon,
-                             icon_cache=self.icon_cache,
                              downicon=self.downicon,
-                             icon_file_template=self.icon_file_template)
+                             defaulticon=self.defaulticon)
 
         self.icon.new(self.hnstat.bonus_percent_remaining,
                       self.hnstat.anytime_percent_remaining,
                       self.hnstat.signal_strength,
                       self.hnstat._last_tx,
-                      self.hnstat._last_rx,
-                      pixbuf=True,
-                      save=False)
+                      self.hnstat._last_rx)
 
     def populate(self, force=False):
         """ Populate the GUI with the current status """
