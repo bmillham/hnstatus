@@ -27,6 +27,7 @@ class Icon(object):
                  anytime_color=None,
                  ss_colors=None,
                  tx_rx_colors=None,
+                 background_color=None,
                  indicator=None,
                  downicon=None,
                  defaulticon=None):
@@ -47,6 +48,8 @@ class Icon(object):
         self.tx_rx_colors = self._verify_color(tx_rx_colors.split(','),
                                                ['red',
                                                 'white'])
+        self.background_color = self._verify_color([background_color],
+                                                   ['white'])
 
         self.downicon = downicon
         self.defaulticon = defaulticon
@@ -140,7 +143,8 @@ class Icon(object):
         self.indicator.set_from_pixbuf(self.pixbuf())
 
     def create_icon(self):
-        self.img = Image.new('RGB', (self._width, self._height), 'white')
+        self.img = Image.new('RGB', (self._width, self._height),
+                             self.background_color)
         self.draw = ImageDraw.Draw(self.img)
         self._bonusline()
         self._anytimeline()

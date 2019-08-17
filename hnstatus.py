@@ -41,6 +41,10 @@ if __name__ == '__main__':
                         help='''Comma separated list of the tx/rx indicator
                         colors. First value is for active, second value is
                         inactive. (Default: red,white)''')
+    parser.add_argument('-g',
+                        '--background-color',
+                        default='white',
+                        help='''Color of the statusicon background''')
     args = parser.parse_args()
     if not args.ip:
         args.ip = '192.168.0.1'
@@ -74,6 +78,7 @@ if __name__ == '__main__':
                 anytime_color=args.anytime_color,
                 ss_colors=args.ss_colors,
                 tx_rx_colors=args.tx_rx_colors,
+                background_color=args.background_color,
                 hnstat=hn)
 
     # Display the GUI
