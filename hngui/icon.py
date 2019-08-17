@@ -23,6 +23,9 @@ class Icon(object):
                  space=0,
                  width=33,
                  arrowheight=15,
+                 bonus_color=None,
+                 anytime_color=None,
+                 ss_colors=None,
                  indicator=None,
                  downicon=None,
                  defaulticon=None):
@@ -34,6 +37,9 @@ class Icon(object):
         self.icon_name_template = "b_{}_a_{}_s_{}_t_{}_r_{}"
         self.icon_name = None
         self.last_icon = None
+        self.bonus_color = bonus_color
+        self.anytime_color = anytime_color
+        self.ss_colors = ss_colors.split(',')
         self.downicon = downicon
         self.defaulticon = defaulticon
         self.indicator = indicator
@@ -107,12 +113,9 @@ class Icon(object):
         self.img = Image.new('RGB', (self._width, self._height), 'white')
         self.draw = ImageDraw.Draw(self.img)
         ah = self.arrowheight * 2
-        if self.bonus == 0 and self.anytime == 0 and self.real_ss <= ah:
-            self._unknown()
-        else:
-            self._bonusline()
-            self._anytimeline()
-            self._ssline()
+        self._bonusline()
+        self._anytimeline()
+        self._ssline()
         self._tx()
         self._rx()
 
@@ -128,23 +131,24 @@ class Icon(object):
                              100-self.bonus,
                              self.width,
                              100),
-                            fill='blue')
+                            fill=self.bonus_color)
 
-    def _anytimeline(self, color='green'):
+    def _anytimeline(self):
         offset = self.width + self.space
         self.draw.rectangle((offset,
                              100-self.anytime,
                              self.width + offset - self.space,
                              100),
-                            fill=color)
+                            fill=self.anytime_color)
 
-    def _ssline(self, color='black'):
+    def _ssline(self,):
         if self.ss < (self.arrowheight * 2):
             self.ss = (self.ss * 2) + (self.arrowheight * 2)
+        color = self.ss_colors[0].strip()
         if self.real_ss < 50:
-            color = 'fuchsia'
+            color = self.ss_colors[1].strip()
         if self.real_ss < (self.arrowheight * 2):
-            color = 'gray'
+            color = self.ss_colors[2].strip()
 
         offset = (self.width * 2) + self.space
         self.draw.rectangle((offset,

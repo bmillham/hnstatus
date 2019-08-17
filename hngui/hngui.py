@@ -16,7 +16,12 @@ class HnGui():
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, path=None, file=None, hnstat=None):
+    def __init__(self, path=None,
+                 file=None,
+                 hnstat=None,
+                 bonus_color=None,
+                 anytime_color=None,
+                 ss_colors=None):
         """ Create the GUI, but do not display it """
 
         signals = {
@@ -72,6 +77,9 @@ class HnGui():
                     "Bonus Remaining: {} ({:.02f}%)",
                     "Estimated: {:.02f}%"]
         self.tooltip_template = '\n'.join(template)
+        self.bonus_color = bonus_color
+        self.anytime_color = anytime_color
+        self.ss_colors = ss_colors
         self.highlight_color = Gdk.RGBA()
         self.highlight_color.parse('red')
         self.normal_color = Gdk.RGBA()
@@ -154,6 +162,9 @@ class HnGui():
                              arrowheight=15,
                              indicator=self.statusicon,
                              downicon=self.downicon,
+                             bonus_color=self.bonus_color,
+                             anytime_color=self.anytime_color,
+                             ss_colors=self.ss_colors,
                              defaulticon=self.defaulticon)
 
         self.icon.new(self.hnstat.bonus_percent_remaining,
