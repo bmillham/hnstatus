@@ -23,7 +23,8 @@ class HnGui():
                  anytime_color=None,
                  ss_colors=None,
                  tx_rx_colors=None,
-                 background_color=None):
+                 background_color=None,
+                 update_interval=1000):
         """ Create the GUI, but do not display it """
 
         signals = {
@@ -36,6 +37,8 @@ class HnGui():
         }
 
         self._last_status_warning = None
+        self.hnstat = hnstat
+        self.auto_update_source = None
 
         self.gtk = Gtk
 
@@ -67,9 +70,7 @@ class HnGui():
         self.update_time_label = builder.get_object('update_time_label')
         self.estimated_use_label = builder.get_object('estimated_label')
         self.menu = builder.get_object('ind_menu')
-
-        self.hnstat = hnstat
-        self.auto_update_source = None
+        self.update_interval = update_interval
         self.icon = None
 
         template = ["hnStatus",
@@ -102,7 +103,7 @@ class HnGui():
 
         Notify.init('hnstatus-appindicator')
 
-        self.update_interval = 1000  # Update interval 1s
+        self.update_interval = update_interval  # Update interval 1s
 
     def about(self, widget):
         self.about_window.show_all()

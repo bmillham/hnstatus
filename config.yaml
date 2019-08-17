@@ -1,0 +1,14 @@
+# Colors must match HTML colors and are not case sensitive.
+# Hex formatting: i.e. #ff0000 may be used but must be quoted.
+
+colors:
+ bonus_color: blue
+ anytime_color: green
+ ss_colors: [black, fuchsia, gray]
+ tx_rx_colors: ['#ff0000', white]
+ background_color: white
+
+program:
+ update_interval: 1000 # 1000 = 1 second.
+ IP: 192.168.0.1
+ auto_update: True

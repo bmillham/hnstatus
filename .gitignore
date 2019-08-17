@@ -26,3 +26,5 @@ statusicon\.py
 resources/images/hn-indicater\.png
 
 resources/icons/hnmodem-down\.png
+
+*.yaml~

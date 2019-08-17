@@ -10,8 +10,55 @@ from hngui.hngui import HnGui
 import os
 import argparse
 import ipaddress
+try:
+    import yaml
+except Exception:
+    print('Unable to import yaml to read configuration file')
+    yaml = None
 
 if __name__ == '__main__':
+    # Get the directory of this file
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    glade_file = os.path.join(dir_path, 'hnstatus.glade')
+    config_file = os.path.join(dir_path, 'config.yaml')
+
+    # The default colors
+    colors = {
+        'bonus_color': 'blue',
+        'anytime_color': 'green',
+        'ss_colors': ['black', 'fuchsia', 'gray'],
+        'tx_rx_colors': ['red', 'white'],
+        'background_color': 'white',
+    }
+
+    # Default program options
+    program = {
+        'update_interval': 1000,
+        'IP': '192.168.0.1',
+        'auto_update': True,
+    }
+
+    # Read the configuration file
+    try:
+        with open(config_file) as f:
+            config = yaml.load(f)
+        # Merge the colors from the yaml with the defaults
+        # yaml colors override the defaults.
+        try:
+            colors = {**colors, **config['colors']}
+        except KeyError:
+            print('No color information in config file')
+        try:
+            program = {**program, **config['program']}
+        except KeyError:
+            print('No program options in config file')
+    except FileNotFoundError:
+        print('Unable to open configuration file:', config_file)
+    except AttributeError:
+        pass  # Warning was already given
+
+    # Get command line options
+    # Command line colors override both default and yaml colors
     parser = argparse.ArgumentParser(
         description='Monitor a HT2000w Modem for status information',
         epilog='''When specifying color names, they must conform to
@@ -20,15 +67,15 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--ip', help='IP address of the HN Modem')
     parser.add_argument('-b',
                         '--bonus-color',
-                        default='blue',
+                        default=colors['bonus_color'],
                         help='Color of the bonus bar (Default: blue)')
     parser.add_argument('-a',
                         '--anytime-color',
-                        default='green',
+                        default=colors['anytime_color'],
                         help='Color of the anytime bar (Default: green)')
     parser.add_argument('-s',
                         '--ss-colors',
-                        default='black,fuchsia,gray',
+                        default=','.join(colors['ss_colors']),
                         help='''Comma separated list of the signal strength
                         bar colors.
                         The first value is for SS > 50,
@@ -37,17 +84,17 @@ if __name__ == '__main__':
                         (Default: black,fuchsia,gray)''')
     parser.add_argument('-t',
                         '--tx-rx-colors',
-                        default='red,white',
+                        default=",".join(colors['tx_rx_colors']),
                         help='''Comma separated list of the tx/rx indicator
                         colors. First value is for active, second value is
                         inactive. (Default: red,white)''')
     parser.add_argument('-g',
                         '--background-color',
-                        default='white',
+                        default=colors['background_color'],
                         help='''Color of the statusicon background''')
     args = parser.parse_args()
     if not args.ip:
-        args.ip = '192.168.0.1'
+        args.ip = program['IP']
     try:
         ipaddress.ip_address(args.ip)
     except ValueError:
@@ -67,10 +114,6 @@ if __name__ == '__main__':
 
     hn = HnModemStatus(ip=args.ip)
 
-    # Get the directory of this file
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    glade_file = os.path.join(dir_path, 'hnstatus.glade')
-
     # Build the GUI
     gui = HnGui(path=dir_path,
                 file=glade_file,
@@ -79,13 +122,15 @@ if __name__ == '__main__':
                 ss_colors=args.ss_colors,
                 tx_rx_colors=args.tx_rx_colors,
                 background_color=args.background_color,
+                update_interval=program['update_interval'],
                 hnstat=hn)
 
     # Display the GUI
     gui.window1.show_all()
 
     # Set autorefresh
-    gui.auto_refresh_button.set_active(True)
+    if program['auto_update']:
+        gui.auto_refresh_button.set_active(True)
 
     # Run Gtk
     gui.gtk.main()
