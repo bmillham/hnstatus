@@ -8,9 +8,22 @@
 from hnmodemstatus.hnmodemstatus import HnModemStatus
 from hngui.hngui import HnGui
 import os
+import argparse
+import ipaddress
 
 if __name__ == '__main__':
-    hn = HnModemStatus(ip='192.168.0.1')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--ip', help='IP address of the HN Modem')
+    args = parser.parse_args()
+    if not args.ip:
+        args.ip = '192.168.0.1'
+    try:
+        ipaddress.ip_address(args.ip)
+    except ValueError:
+        print('IP address is invalid:', args.ip)
+        exit(1)
+
+    hn = HnModemStatus(ip=args.ip)
 
     # Get the directory of this file
     dir_path = os.path.dirname(os.path.realpath(__file__))
