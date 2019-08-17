@@ -21,7 +21,8 @@ class HnGui():
                  hnstat=None,
                  bonus_color=None,
                  anytime_color=None,
-                 ss_colors=None):
+                 ss_colors=None,
+                 tx_rx_color=None):
         """ Create the GUI, but do not display it """
 
         signals = {
@@ -80,6 +81,7 @@ class HnGui():
         self.bonus_color = bonus_color
         self.anytime_color = anytime_color
         self.ss_colors = ss_colors
+        self.tx_rx_color = tx_rx_color
         self.highlight_color = Gdk.RGBA()
         self.highlight_color.parse('red')
         self.normal_color = Gdk.RGBA()
@@ -165,6 +167,7 @@ class HnGui():
                              bonus_color=self.bonus_color,
                              anytime_color=self.anytime_color,
                              ss_colors=self.ss_colors,
+                             tx_rx_color=self.tx_rx_color,
                              defaulticon=self.defaulticon)
 
         self.icon.new(self.hnstat.bonus_percent_remaining,

@@ -26,6 +26,7 @@ class Icon(object):
                  bonus_color=None,
                  anytime_color=None,
                  ss_colors=None,
+                 tx_rx_color=None,
                  indicator=None,
                  downicon=None,
                  defaulticon=None):
@@ -43,6 +44,8 @@ class Icon(object):
         self.ss_colors = self._verify_color(ss_colors.split(','), ['black',
                                                                    'fuchsia',
                                                                    'gray'])
+        self.tx_rx_color = self._verify_color([tx_rx_color], ['red'])
+
         self.downicon = downicon
         self.defaulticon = defaulticon
         self.indicator = indicator
@@ -195,7 +198,7 @@ class Icon(object):
 
     def _tx(self):
         if self.tx:
-            color = 'red'
+            color = self.tx_rx_color
         else:
             color = 'white'
         top = 1
@@ -204,7 +207,7 @@ class Icon(object):
 
     def _rx(self):
         if self.rx:
-            color = 'red'
+            color = self.tx_rx_color
         else:
             color = 'white'
         top = 99

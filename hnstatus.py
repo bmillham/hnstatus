@@ -34,6 +34,10 @@ if __name__ == '__main__':
                         The second value is for SS > 35 < 50
                         and the final value is for SS < 35.
                         (Default: black,fuchsia,gray)''')
+    parser.add_argument('-t',
+                        '--tx-rx-color',
+                        default='red',
+                        help='Color of the tx/rx indicators')
     args = parser.parse_args()
     if not args.ip:
         args.ip = '192.168.0.1'
@@ -61,6 +65,7 @@ if __name__ == '__main__':
                 bonus_color=args.bonus_color,
                 anytime_color=args.anytime_color,
                 ss_colors=args.ss_colors,
+                tx_rx_color=args.tx_rx_color,
                 hnstat=hn)
 
     # Display the GUI
