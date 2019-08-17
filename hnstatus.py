@@ -29,15 +29,18 @@ if __name__ == '__main__':
     parser.add_argument('-s',
                         '--ss-colors',
                         default='black,fuchsia,gray',
-                        help='''Comma separated list of the signal strength bar.
+                        help='''Comma separated list of the signal strength
+                        bar colors.
                         The first value is for SS > 50,
                         The second value is for SS > 35 < 50
                         and the final value is for SS < 35.
                         (Default: black,fuchsia,gray)''')
     parser.add_argument('-t',
-                        '--tx-rx-color',
-                        default='red',
-                        help='Color of the tx/rx indicators')
+                        '--tx-rx-colors',
+                        default='red,white',
+                        help='''Comma separated list of the tx/rx indicator
+                        colors. First value is for active, second value is
+                        inactive. (Default: red,white)''')
     args = parser.parse_args()
     if not args.ip:
         args.ip = '192.168.0.1'
@@ -50,8 +53,13 @@ if __name__ == '__main__':
     try:
         n, w, c = args.ss_colors.split(',')
     except ValueError:
-        print('SS Colors must be a comma separated list of 3 colors')
+        print('SS colors must be a comma separated list of 3 colors')
         exit(1)
+
+    try:
+        a, i = args.tx_rx_colors.split(',')
+    except ValueError:
+        print('Tx/Rx colors must be a comma separated list of 2 colors')
 
     hn = HnModemStatus(ip=args.ip)
 
@@ -65,7 +73,7 @@ if __name__ == '__main__':
                 bonus_color=args.bonus_color,
                 anytime_color=args.anytime_color,
                 ss_colors=args.ss_colors,
-                tx_rx_color=args.tx_rx_color,
+                tx_rx_colors=args.tx_rx_colors,
                 hnstat=hn)
 
     # Display the GUI

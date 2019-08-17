@@ -26,7 +26,7 @@ class Icon(object):
                  bonus_color=None,
                  anytime_color=None,
                  ss_colors=None,
-                 tx_rx_color=None,
+                 tx_rx_colors=None,
                  indicator=None,
                  downicon=None,
                  defaulticon=None):
@@ -44,7 +44,9 @@ class Icon(object):
         self.ss_colors = self._verify_color(ss_colors.split(','), ['black',
                                                                    'fuchsia',
                                                                    'gray'])
-        self.tx_rx_color = self._verify_color([tx_rx_color], ['red'])
+        self.tx_rx_colors = self._verify_color(tx_rx_colors.split(','),
+                                               ['red',
+                                                'white'])
 
         self.downicon = downicon
         self.defaulticon = defaulticon
@@ -55,6 +57,7 @@ class Icon(object):
         fixed_color = []
         i = 0
         for c in color:
+            c = c.strip()  # Get rid of extra spaces
             try:
                 ImageColor.getrgb(c)
             except ValueError:
@@ -198,18 +201,18 @@ class Icon(object):
 
     def _tx(self):
         if self.tx:
-            color = self.tx_rx_color
+            color = self.tx_rx_colors[0]
         else:
-            color = 'white'
+            color = self.tx_rx_colors[1]
         top = 1
         bottom = top + self.arrowheight
         self._arrow(top, bottom, color)
 
     def _rx(self):
         if self.rx:
-            color = self.tx_rx_color
+            color = self.tx_rx_colors[0]
         else:
-            color = 'white'
+            color = self.tx_rx_colors[1]
         top = 99
         bottom = top - self.arrowheight
         self._arrow(top, bottom, color)
