@@ -12,7 +12,11 @@ import argparse
 import ipaddress
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description='Monitor a HT2000w Modem for status information',
+        epilog='''When specifying color names, they must conform to
+                  HTML names. See https://html-color-codes.info/color-names/
+                  for a list of valid names''')
     parser.add_argument('-i', '--ip', help='IP address of the HN Modem')
     parser.add_argument('-b',
                         '--bonus-color',

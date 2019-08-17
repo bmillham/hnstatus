@@ -6,7 +6,7 @@ import gi
 gi.require_version('GdkPixbuf', '2.0')
 from gi.repository import GdkPixbuf  # noqa: E402
 try:
-    from PIL import Image, ImageDraw  # noqa: E402
+    from PIL import Image, ImageDraw, ImageColor  # noqa: E402
 except ModuleNotFoundError:
     print('WARNING: Unable to import PIL.')
     print('WARNING: StatusIcon will not be updated with current status')
@@ -37,12 +37,36 @@ class Icon(object):
         self.icon_name_template = "b_{}_a_{}_s_{}_t_{}_r_{}"
         self.icon_name = None
         self.last_icon = None
-        self.bonus_color = bonus_color
-        self.anytime_color = anytime_color
-        self.ss_colors = ss_colors.split(',')
+
+        self.bonus_color = self._verify_color([bonus_color], ['blue'])
+        self.anytime_color = self._verify_color([anytime_color], ['green'])
+        self.ss_colors = self._verify_color(ss_colors.split(','), ['black',
+                                                                   'fuchsia',
+                                                                   'gray'])
         self.downicon = downicon
         self.defaulticon = defaulticon
         self.indicator = indicator
+
+    def _verify_color(self, color, default):
+        """ Verify if the colors in a list are valid HTML colors """
+        fixed_color = []
+        i = 0
+        for c in color:
+            try:
+                ImageColor.getrgb(c)
+            except ValueError:
+                print('{} is not a valid color. Defaulting to {}'.format(
+                    c,
+                    default[i]))
+                fixed_color.append(default[i])
+            else:
+                fixed_color.append(c)
+            i += 1
+
+        if len(fixed_color) == 1:
+            return fixed_color[0]
+        else:
+            return fixed_color
 
     def pixbuf(self):
         """Convert Pillow image to GdkPixbuf"""
@@ -112,7 +136,6 @@ class Icon(object):
     def create_icon(self):
         self.img = Image.new('RGB', (self._width, self._height), 'white')
         self.draw = ImageDraw.Draw(self.img)
-        ah = self.arrowheight * 2
         self._bonusline()
         self._anytimeline()
         self._ssline()
@@ -141,7 +164,7 @@ class Icon(object):
                              100),
                             fill=self.anytime_color)
 
-    def _ssline(self,):
+    def _ssline(self):
         if self.ss < (self.arrowheight * 2):
             self.ss = (self.ss * 2) + (self.arrowheight * 2)
         color = self.ss_colors[0].strip()
