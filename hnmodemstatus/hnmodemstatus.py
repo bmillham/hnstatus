@@ -58,7 +58,7 @@ class HnModemStatus:
         error = None
 
         try:
-            json = requests.get(json_page, timeout=1).json()
+            json = requests.get(json_page, timeout=(0.1, .1)).json()
         except ConnectionError:
             error = 'Connection Error'
         except OSError:
