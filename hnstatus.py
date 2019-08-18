@@ -36,6 +36,7 @@ if __name__ == '__main__':
         'update_interval': 1000,
         'IP': '192.168.0.1',
         'auto_update': True,
+        'start_minimized': False,
     }
 
     # Read the configuration file
@@ -126,7 +127,8 @@ if __name__ == '__main__':
                 hnstat=hn)
 
     # Display the GUI
-    gui.window1.show_all()
+    if not program['start_minimized']:
+        gui.window1.show_all()
 
     # Set autorefresh
     if program['auto_update']:

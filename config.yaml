@@ -12,3 +12,4 @@ program:
  update_interval: 1000 # 1000 = 1 second.
  IP: 192.168.0.1
  auto_update: True
+ start_minimized: True
