@@ -456,8 +456,9 @@ Author: Brian Millham
     <property name="deletable">False</property>
     <property name="transient_for">window1</property>
     <property name="program_name">hnstatus</property>
-    <property name="version">0.1</property>
+    <property name="version">0.1.1</property>
     <property name="copyright" translatable="yes">(C) 2019 Brian Millham</property>
+    <property name="comments" translatable="yes">Press ESC to close or click on Close</property>
     <property name="authors">Brian Millham</property>
     <property name="logo">resources/icons/hnmodem.png</property>
     <property name="license_type">gpl-2-0</property>
