@@ -47,7 +47,7 @@ Author: Brian Millham
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">HNStatus</property>
     <property name="window_position">center</property>
-    <property name="icon">resources/images/hn-indicater.png</property>
+    <property name="icon">resources/icons/hnmodem100x100.png</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="gravity">south-east</property>
     <signal name="destroy" handler="on_window1_destroy" swapped="no"/>
@@ -488,13 +488,8 @@ Author: Brian Millham
     </child>
   </object>
   <object class="GtkStatusIcon" id="ind_image">
-    <property name="file">resources/images/hn-indicater.png</property>
+    <property name="file">resources/icons/hnmodem100x100.png</property>
     <property name="visible">False</property>
-  </object>
-  <object class="GtkImage" id="ind_image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">resources/images/hn-indicater.png</property>
   </object>
   <object class="GtkMenu" id="ind_menu">
     <property name="visible">True</property>

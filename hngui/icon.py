@@ -57,6 +57,8 @@ class Icon(object):
 
     def _verify_color(self, color, default):
         """ Verify if the colors in a list are valid HTML colors """
+        if not Image:
+            return color  # Do nothing if PIL wasn't found
         fixed_color = []
         i = 0
         for c in color:
