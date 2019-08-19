@@ -49,7 +49,7 @@ Author: Brian Millham
     <property name="window_position">center</property>
     <property name="icon">resources/images/hn-indicater.png</property>
     <property name="skip_taskbar_hint">True</property>
-    <property name="gravity">static</property>
+    <property name="gravity">south-east</property>
     <signal name="destroy" handler="on_window1_destroy" swapped="no"/>
     <signal name="window-state-event" handler="window_state_event" swapped="no"/>
     <child>

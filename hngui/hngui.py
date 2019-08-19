@@ -24,6 +24,9 @@ class HnGui():
                  ss_colors=None,
                  tx_rx_colors=None,
                  background_color=None,
+                 window_x=0,
+                 window_y=0,
+                 config_file=None,
                  update_interval=1000):
         """ Create the GUI, but do not display it """
 
@@ -39,6 +42,7 @@ class HnGui():
         self._last_status_warning = None
         self.hnstat = hnstat
         self.auto_update_source = None
+        self.config_file = config_file
 
         self.gtk = Gtk
 
@@ -104,6 +108,9 @@ class HnGui():
         Notify.init('hnstatus-appindicator')
 
         self.update_interval = update_interval  # Update interval 1s
+        self.window1_is_moving = False
+        self.window1_disable_move = False
+        self.window1_coords = (True, window_x, window_y)
 
     def about(self, widget):
         self.about_window.show_all()
@@ -135,6 +142,19 @@ class HnGui():
         """ Exit the program """
 
         # pylint: disable=no-self-use, unused-argument
+        self.window_disable_move = True
+        self.window1_is_moving = True
+        if self.config_file:
+            import yaml
+            with open(self.config_file) as f:
+                config = yaml.load(f)
+            pos = self.window1.get_position()
+            if config['program']['y_pos'] - pos.root_y:
+                config['program']['y_pos'] = pos.root_y + 5
+            config['program']['x_pos'] = pos.root_x
+            with open(self.config_file, "w") as f:
+                yaml.dump(config, f)
+
         Notify.uninit()
         self.gtk.main_quit()
 
@@ -154,11 +174,18 @@ class HnGui():
                 self.auto_update_source = None
 
     def show(self, widget):
+        self.window1_disable_move = True
+        self.window1_is_moving = False
         self.window1.deiconify()
         self.window1.set_visible(True)
+        self.window1.move(self.window1_coords[1], self.window1_coords[2])
+        self.window1_is_moving = False
+        self.window1_disable_move = False
 
     def hide(self, widget):
+        self.window1_disable_move = True
         self.window1.set_visible(False)
+        self.window1_is_moving = False
 
     def set_icon(self):
         if not self.icon:

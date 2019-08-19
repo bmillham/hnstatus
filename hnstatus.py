@@ -55,8 +55,9 @@ if __name__ == '__main__':
             print('No program options in config file')
     except FileNotFoundError:
         print('Unable to open configuration file:', config_file)
+        config_file = None
     except AttributeError:
-        pass  # Warning was already given
+        config_file = None
 
     # Get command line options
     # Command line colors override both default and yaml colors
@@ -123,8 +124,15 @@ if __name__ == '__main__':
                 ss_colors=args.ss_colors,
                 tx_rx_colors=args.tx_rx_colors,
                 background_color=args.background_color,
+                window_x=program['x_pos'],
+                window_y=program['y_pos'],
                 update_interval=program['update_interval'],
+                config_file=config_file,
                 hnstat=hn)
+
+    # Restore saved position
+    if 'x_pos' in program and 'y_pos' in program:
+        gui.window1.move(program['x_pos'], program['y_pos'])
 
     # Display the GUI
     if not program['start_minimized']:
@@ -135,4 +143,4 @@ if __name__ == '__main__':
         gui.auto_refresh_button.set_active(True)
 
     # Run Gtk
-    gui.gtk.main()
+    rc = gui.gtk.main()
