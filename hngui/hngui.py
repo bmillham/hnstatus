@@ -91,7 +91,8 @@ class HnGui():
         self.background_color = background_color
         self.highlight_color = Gdk.RGBA()
         self.highlight_color.parse('red')
-        self.normal_color = None  # Leave the color alone if not highlighted
+        self.normal_color = Gdk.RGBA()
+        self.normal_color.parse('black')
 
         # Setup the appindicator
         self.downicon = os.path.join(path,
