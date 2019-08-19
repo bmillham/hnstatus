@@ -21,6 +21,7 @@ if __name__ == '__main__':
     dir_path = os.path.dirname(os.path.realpath(__file__))
     glade_file = os.path.join(dir_path, 'hnstatus.glade')
     config_file = os.path.join(dir_path, 'config.yaml')
+    state_code_file = os.path.join(dir_path, 'statecodes.yaml')
 
     # The default colors
     colors = {
@@ -41,8 +42,16 @@ if __name__ == '__main__':
 
     # Read the configuration file
     try:
+        loader = yaml.FullLoader
+    except AttributeError:
+        print('This version of Yaml does not support FullLoader.')
+        loader = None
+    try:
         with open(config_file) as f:
-            config = yaml.load(f, Loader=yaml.FullLoader)
+            if loader:
+                config = yaml.load(f, Loader=loader)
+            else:
+                config = yaml.load(f)
         # Merge the colors from the yaml with the defaults
         # yaml colors override the defaults.
         try:
@@ -57,6 +66,17 @@ if __name__ == '__main__':
         print('Unable to open configuration file:', config_file)
     except AttributeError:
         pass  # Warning was already given
+
+    try:
+        with open(state_code_file) as f:
+            if loader:
+                state_codes = yaml.load(f, Loader=yaml.FullLoader)
+            else:
+                state_codes = yaml.load(f)
+    except FileNotFoundError:
+        print('Unable to open statecodes file:', state_code_file)
+    except AttributeError:
+        pass
 
     # Get command line options
     # Command line colors override both default and yaml colors

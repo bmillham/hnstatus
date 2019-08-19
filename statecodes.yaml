@@ -1,0 +1,187 @@
+# State codes for the HN modem
+# Thank you to CORROSIVE for the list of known codes!
+
+1.1.1: MAC Address invalid
+1.1.2: LAN MAC PHY test failed
+1.1.3: Tx synthesizer lock test failed
+1.1.4: Rx Tuner lock test failed
+1.1.5: VCO monitor test failed
+1.1.6: ODU voltage test failed
+1.1.7: Key check failed
+1.1.8: RAM test failed
+1.2.1: Temperature greater than configured threshold
+
+2.1.1: Unable to communicate with Outdoor Unit
+2.1.2: Outdoor Unit reports low voltage
+2.1.3: Outdoor Unit reports PLL unlocked
+2.1.4: Invalid Radio Serial Number and/or Part Number
+
+3.1.1: Satellite cable appears to be unplugged or broken
+3.1.2: Satellite cable appears to be too long or inferior quality
+
+11.1.1: Downlink sequencer firmware is not running
+11.1.2: Downlink kernel packet processor is not running
+11.1.3: Control message queue watermark is above threshold
+11.1.4: Downlink acquisition Demod and/or FLL thread is not running
+11.1.5: Downlink acquisition Demod thread is not running
+11.1.6: Downlink Sequencer Failed to load key
+11.2.1: Outroute is not locked
+11.2.2: Outroute is locked to an unknown carrier
+11.2.3: Outroute is locked to the wrong carrier
+11.2.4: Outroute has lost lock due to excessive LNB frequency drift
+11.2.5: Outroute has lost lock
+11.2.6: Outroute Demod failed to select LNB frequency band using diseqc
+11.2.7: Outroute Demod failed to select LNB Polarity using diseqc
+11.3.1: FLL is not locked
+11.4.1: ACM is not enabled or trajectory table is missing
+11.4.2: ACM is operating at the lowest Modcod
+
+12.1.1: Uplink firmware failed to load
+12.1.2: Transmission is barred
+12.1.3: Antenna pointing has not been validated
+12.1.4: Transmission test in progress
+12.1.5: Transmission TFIX (test mode) in progress
+12.1.6: UPP encountered an underrun error
+12.1.7: UPP encountered an error scheduling bursts after SWP response
+12.1.8: UPP encountered an TXHA FEC stuck error
+12.1.9: Transmission error rate is high
+12.1.10: Calibration files are missing or invalid for linear transmitter
+12.1.11: UNKNOWN
+12.1.12: UNKNOWN
+12.1.13: UNKNOWN
+12.2.1: Outroute is not locked
+12.2.2: FLL is not locked
+12.3.1: Not receiving timing packets
+12.3.2: Invalid timing packet information
+12.3.3: Clock synchronization error
+12.3.4: Timing adjustment needed
+12.4.1: Not receiving inroute group definition packets
+12.4.2: Unable to select a valid inroute group
+12.4.3: No transmit frequencies defined
+12.4.4: Unable to select inroute group due to no Bootstrap Aloha metric
+12.4.5: Unable to select inroute group due to no Ranging metric
+12.4.6: Unable to select inroute group due to no User Load metric
+12.5.1: Failed to successfully range any rate
+12.5.2: Failed to successfully range all available rates
+12.5.3: No inroute groups available at successfully ranged rates
+12.5.4: No supported rates available in the network
+12.5.5: Adaptive Inroute Selection (AIS) is not enabled
+12.5.6: Lowest Symcod in the AIS Trajectory Table selected
+12.6.1: Not receiving bandwidth allocation packets
+12.6.2: No bandwidth allocation information available
+12.6.3: No Aloha allocation information available
+12.6.4: No Bootstrap Aloha allocation information available
+12.7.1: Aloha transmission is unsuccessful
+12.7.2: Bootstrap Aloha transmission is unsuccessful
+12.8.1: Requesting ranging
+12.8.2: Computing ranging values
+12.8.3: Sending ranging results
+12.9.1: Not receiving inroute power feedback packets
+
+13.1.1: LAN cable is not attached
+13.2.1: Packet NOT received from LAN interface
+13.2.2: Packet to internet NOT received from the LAN interface
+13.2.3: Packet(s) received from unauthorized subnet
+13.2.4: Packet(s) received from default subnet
+
+14.1.1: No devices connected
+14.2.1: 2.4Ghz Radio Turned Off
+14.2.2: 5Ghz Radio Turned Off
+14.2.3: Both Wifi Radios Turned Off
+
+20.1.1: Not receiving Management Router Advertisement (MRA) messages
+20.2.1: Not receiving Management System (MS) Information messages
+
+21.1.1: System Assigned Identifier (SAI) is not available
+21.1.2: Not receiving Management Router Advertisement (MRA) messages
+21.1.3: All Association requests rejected, entering Backoff State.
+21.1.4: Creating Data IPGW Pool
+21.1.5: Associating with Data IPGW
+21.2.1: Creating Wall Garden IPGW Pool
+21.2.2: Associating with Wall Garden IPGW
+21.2.3: Associated with Walled Garden IPGW for an Unknown Reason
+21.2.4: Associated with Wall Garden IPGW for Terminal Activation
+21.2.5: Associated with Wall Garden IPGW for Service Activation
+21.2.6: Associated with Wall Garden IPGW due to Empty Data IPGW pool
+21.2.7: Associated with Wall Garden IPGW due to Signature mismatch
+21.2.8: Associated with Wall Garden IPGW due to Data IPGW Load Error
+21.2.9: Associated with Wall Garden IPGW due to Service Mismatch
+21.2.10: Associated with Wall Garden IPGW due to Data IPGW Connection Failure
+21.2.11: Associated with Wall Garden IPGW due to Billing suspension
+21.2.12: Associated with Wall Garden IPGW due to Seasonal suspension
+21.2.13: Associated with Wall Garden IPGW due to Quality Assurance Testing
+
+22.1.1: Waiting for installation parameters or terminal swap information
+22.1.10: SBC configuration file is invalid or not found
+22.1.11: Hardware configuration file is invalid or not found
+22.1.12: Unable to select beam based on provided terminal location
+22.2.1: Pointing In Progress – Outroute not locked
+22.2.2: Pointing In Progress – Outroute locked
+22.2.3: Pointing In Progress – Beam changed - Set Radio Polarization to Left Hand
+22.2.4: Pointing In Progress – Beam changed - Set Radio Polarization to Right Hand
+22.2.5: Pointing In Progress – Outroute locked but not receiving UBIP messages
+22.2.6: Pointing In Progress – Outroute locked but UBIP does not indicate any available outroutes
+22.2.7: Pointing In Progress – Outroute locked but Polarization mismatch between sbc and system info
+22.2.8: Pointing In Progress – Outroute locked but Frequency mismatch between sbc and system info
+22.2.9: Pointing In Progress – Outroute locked but symbol rate mismatch between sbc and system info
+22.3.1: Ranging In Progress
+22.3.2: Registration In Progress
+22.3.3: Waiting for Configuration
+22.3.4: Associating with network
+22.3.5: Terminal Activation stage
+22.3.10: Bad Downlink state
+22.3.11: Unable to transmit successfully to the Gateway
+22.3.12: Failed to successfully range most robust rate
+22.3.13: Bad Uplink State
+22.3.14: Registration failed because terminal failed to resolve NMS address
+22.3.15: Registration failed because terminal received invalid response from NMS
+22.3.16: Registration failed because terminal failed to authenticate NMS
+22.3.21: Registration failed due to invalid terminal serial number
+22.3.22: Registration failed due to blacklisted terminal serial number
+22.3.23: Registration failed because terminal swap not allowed
+22.3.24: Registration failed because terminal move not allowed
+22.3.25: Registration failed because registration information was not provided
+23.3.26: Registration failed because registration information is invalid
+22.3.27: Registration failed because NMS failed to authenticate terminal
+22.3.28: Registration failed because NMS received simultaneous registration messages
+22.3.29: Registration failed because challenge response timeout
+22.3.30: Registration failed because NMS processing failure
+
+23.1.1: All Backbones are down
+23.1.2: PEP is disabled
+23.1.3: No Classifier rule defined
+23.1.4: Some backbones are down
+23.1.5: Excessive backbone resets received
+23.1.6: Excessive backbone resets transmitted
+23.1.7: Excessive PBP Selective Acknowledgments transmitted
+23.1.8: Excessive PBP Selective Acknowledgments received
+23.1.9: Excessive PBP Zero windows transmitted
+23.1.10: Excessive PBP Zero windows received
+23.1.11: Excessive packets retransmitted
+23.2.1: Excessive Spoofed connection resets received
+23.2.2: Excessive TCP Selective Acknowledgments transmitted
+23.2.3: Excessive TCP Selective Acknowledgments received
+23.2.4: Excessive TCP Zero windows transmitted
+23.2.5: Excessive TCP Zero windows received
+23.2.6: Excessive TCP packets retransmitted
+
+24.1.1: Download Throttled
+24.1.2: FAP information not available
+
+25.1.1: Current key either not exist or outdated
+25.1.2: Alternate (Not Current) key either not exist or outdated
+25.1.3: Unable to request key because key server is not available
+25.1.4: Encrypted master key is not available
+25.1.5: Encrypted master key is bad or corrupted
+25.1.6: Unable to verify key because outroute is not locked
+25.1.7: Unable to verify key because OSDP is not available or expired
+
+26.1.1: Software image downloading
+26.1.2: Configuration files downloading
+
+30.1.1: Web acceleration connection in backoff state
+30.2.2: Web acceleration Disabled by user
+30.2.3: Web acceleration Disabled via configuration
+30.3.4: Web acceleration response time too high
+
+31.1.1: Excessive DNS Response Timeouts

@@ -97,6 +97,13 @@ class HnModemStatus:
         self._usage = usage[0]
         self._association = association[0]
 
+        # Uncomment these lines to see the amount to data read from the modem
+        # bytes_returned = len(str(wan[0])) + \
+        #    len(str(satellite[0])) + \
+        #    len(str(usage[0])) + \
+        #    len(str(association[0]))
+        # print('Total bytes from last read:', bytes_returned)
+
         MB = 1000 * 1000
         usage = self._usage
         self._tokens_available_bytes = usage['tokens']['remaining_mb'] * MB
