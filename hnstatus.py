@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # Read the configuration file
     try:
         with open(config_file) as f:
-            config = yaml.load(f)
+            config = yaml.load(f, Loader=yaml.FullLoader)
         # Merge the colors from the yaml with the defaults
         # yaml colors override the defaults.
         try:

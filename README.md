@@ -8,15 +8,21 @@ hnstatus reads usage information from a HughesNet Gen5 modem and summarises it i
 
 hnstatus is written in Python3 with no support for Python2.
 
-For the StatusIcon to work, you will need Pillow.
+For the StatusIcon to work, you will need Pillow. If pillow is not already installed:
 
 **pip3 install pillow**
+
+You will also need humanfriendy:
+
+**pip3 install humanfriendly**
 
 Planned improvements are to add logging so you will be able to see a nice graph of your usage history.
 
 Current known problems are that the HN modem status codes are not documented, so the only codes that hnstatus can show are ones that I've figured out from trial and error. With more users reporting various status codes to me, I hope to improve that.
 
 To run, just clone this repository, or download the zip and extract it. You can then just run hnstatus.py.
+
+The default update interval is 1 second. You can change that in config.yaml. A setting of 1000 = 1 second, 10000 = 10 seconds, etc.
 
 **hnstatus has currently only been tested on Linux Mint. It should work on any Debian based OS. Please report any problems so I can improve hnstatus.**
 
