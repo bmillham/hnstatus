@@ -10,7 +10,6 @@ from hngui.icon import Icon  # noqa: E402
 from gi.repository import Gtk, GObject, Notify, Gdk  # noqa: E402
 
 
-
 class HnGui():
     """ Builds the Gtk GUI """
 
