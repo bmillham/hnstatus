@@ -16,7 +16,7 @@ class HnModemStatus:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, ip='192.168.0.1'):
+    def __init__(self, ip='192.168.0.1', state_codes=None):
         self.wan = "http://{}/api/home/status/wan".format(ip)
         self.satellite = "http://{}/api/home/status/satellite".format(ip)
         self.usage = "http://{}/api/home/usage".format(ip)
@@ -45,12 +45,17 @@ class HnModemStatus:
         self._last_tx_period = 0
         self._fap_status = -1
         self.estimated_use = 0
-        self.fap_map = ['OK', 'Bonus', 'Unknown', 'Throttled']
-        self.state_map = {
-            '0.0.0': 'Fully operational',
-            '24.1.1': 'Download throttled',
-            'unknown': ''
-            }
+        self.state_codes = state_codes
+        self.fap_map = ['OK',
+                        'Bonus',
+                        'Unknown',
+                        'Throttled',
+                        'Not Associated']
+        if not self.state_codes:
+            self.state_codes = {
+                '0.0.0': 'Fully operational',
+                '24.1.1': 'Download throttled',
+                'unknown': ''}
 
     def get_json(self, json_page=None):
         """ Read a json page and handle errors """
@@ -176,10 +181,15 @@ class HnModemStatus:
             return "{}".format(self._last_error)
 
         try:
-            sc = self.state_map[self._association['fap_state_code']]
+            sc = "{}/{}".format(
+                self.state_codes[self._association['association_state_code']],
+                self.state_codes[self._association['fap_state_code']])
+
         except Exception:
-            print('Unknow state map: ', self._association)
-            sc = self._association['fap_state_code']
+            sc = "{association_state_code}/{fap_state_code}".format(
+                **self._association)
+            print('Unknow state code ', sc)
+
         try:
             return "{} - {}".format(
                 self.fap_map[self._fap_status],

@@ -76,8 +76,9 @@ if __name__ == '__main__':
                 state_codes = yaml.load(f)
     except FileNotFoundError:
         print('Unable to open statecodes file:', state_code_file)
+        state_codes = None
     except AttributeError:
-        pass
+        state_codes = None
 
     # Get command line options
     # Command line colors override both default and yaml colors
@@ -134,7 +135,7 @@ if __name__ == '__main__':
     except ValueError:
         print('Tx/Rx colors must be a comma separated list of 2 colors')
 
-    hn = HnModemStatus(ip=args.ip)
+    hn = HnModemStatus(ip=args.ip, state_codes=state_codes)
 
     # Build the GUI
     gui = HnGui(path=dir_path,
