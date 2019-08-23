@@ -163,6 +163,8 @@ class HnModemStatus:
         if time['mins'] > 0:
             if time['hrs'] > 0:
                 s += " and "
+            else:
+                s += " "
             s += "{mins} minutes".format(**time)
         return s
 

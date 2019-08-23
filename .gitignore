@@ -28,3 +28,9 @@ resources/images/hn-indicater\.png
 resources/icons/hnmodem-down\.png
 
 *.yaml~
+
+position\.yaml
+
+*.py#
+
+hnmodemstatus/\.#hnmodemstatus\.py
