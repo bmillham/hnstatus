@@ -34,3 +34,6 @@ position\.yaml
 *.py#
 
 hnmodemstatus/\.#hnmodemstatus\.py
+
+config.yaml
+
