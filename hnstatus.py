@@ -80,6 +80,17 @@ if __name__ == '__main__':
     except AttributeError:
         state_codes = None
 
+    try:
+        with open(state_code_file) as f:
+            if loader:
+                state_codes = yaml.load(f, Loader=yaml.FullLoader)
+            else:
+                state_codes = yaml.load(f)
+    except FileNotFoundError:
+        print('Unable to open statecodes file:', state_code_file)
+    except AttributeError:
+        pass
+
     # Get command line options
     # Command line colors override both default and yaml colors
     parser = argparse.ArgumentParser(

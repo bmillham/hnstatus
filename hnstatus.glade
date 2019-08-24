@@ -662,6 +662,43 @@ Author: Brian Millham
       </object>
     </child>
   </object>
+<<<<<<< HEAD
+=======
+  <object class="GtkStatusIcon" id="ind_image">
+    <property name="file">resources/icons/hnmodem100x100.png</property>
+    <property name="visible">False</property>
+  </object>
+  <object class="GtkMenu" id="ind_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">About</property>
+        <signal name="activate" handler="about_item" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Refresh</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="populate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Quit</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_window1_destroy" swapped="no"/>
+      </object>
+    </child>
+  </object>
+>>>>>>> master
   <object class="GtkImage" id="up_off">
     <property name="name">up_off</property>
     <property name="visible">True</property>
