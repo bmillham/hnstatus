@@ -36,6 +36,7 @@ class HnGui():
             'window_state_event': self.window_state_event,
             'about_item': self.about,
             'about-close-handler': self.about_close_handler,
+            'set-tooltip': self._set_tooltip,
         }
 
         self._last_status_warning = None
@@ -52,7 +53,8 @@ class HnGui():
         # Get the objects that we will use
         self.window1 = builder.get_object('window1')
         self.about_window = builder.get_object('abouthnstatus')
-        self.status_label = builder.get_object('status_label')
+        self.association_status_label = builder.get_object('association_status_label')
+        self.fap_status_label = builder.get_object('fap_status_label')
         self.data_remaining_label = builder.get_object('data_remaining_label')
         self.tokens_available_label = builder.get_object('tokens_available_label')  # noqa: E501
         self.anytime_remaining_label = builder.get_object('anytime_remaining_label')  # noqa: E501
@@ -77,7 +79,7 @@ class HnGui():
         self.icon = None
 
         template = ["hnStatus",
-                    "Status: {}",
+                    "Association Status: {} FAP Status {}",
                     "Signal Strength: {}",
                     "Anytime Remaining: {} ({:.02f}%)",
                     "Bonus Remaining: {} ({:.02f}%)",
@@ -205,12 +207,19 @@ class HnGui():
                       self.hnstat._last_tx,
                       self.hnstat._last_rx)
 
+    def _set_tooltip(self, widget, x, y, keyboard, tooltip):
+        txt = widget.get_text()
+        if txt == 'OK':
+            txt = None
+        widget.set_tooltip_text(txt)
+
     def populate(self, force=False):
         """ Populate the GUI with the current status """
 
         self.hnstat.fetch_current_stats()
 
-        self.status_label.set_text(self.hnstat.status)
+        self.association_status_label.set_text(self.hnstat.association_status)
+        self.fap_status_label.set_text(self.hnstat.fap_status)
         self.data_remaining_label.set_text(self.hnstat.data_remaining)
         self.tokens_available_label.set_text(self.hnstat.tokens_available)
         self.allowance_resets_label.set_text(self.hnstat.allowance_reset)
@@ -253,7 +262,8 @@ class HnGui():
         self.set_icon()
 
         self.statusicon.set_tooltip_text(self.tooltip_template.format(
-            self.hnstat.status,
+            self.hnstat.association_status,
+            self.hnstat.fap_status,
             self.hnstat.signal_strength,
             self.hnstat.anytime_remaining,
             self.hnstat.anytime_percent_remaining,

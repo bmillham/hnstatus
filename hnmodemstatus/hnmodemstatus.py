@@ -46,11 +46,11 @@ class HnModemStatus:
         self._fap_status = -1
         self.estimated_use = 0
         self.state_codes = state_codes
-        self.fap_map = ['OK',
-                        'Bonus',
-                        'Unknown',
-                        'Throttled',
-                        'Not Associated']
+        self.fap_codes = {0: 'OK',
+                          1: 'Bonus',
+                          3: 'Throttled',
+                          4: 'Not Associated'}
+
         if not self.state_codes:
             self.state_codes = {
                 '0.0.0': 'Fully operational',
@@ -174,33 +174,41 @@ class HnModemStatus:
         return s
 
     @property
-    def status(self):
-        """ The current status """
+    def association_status(self):
+        """ Association status"""
 
         if self._last_error:
-            return "{}".format(self._last_error)
+            return self._last_error
 
-        try:
-            sc = "{}/{}".format(
-                self.state_codes[self._association['association_state_code']],
-                self.state_codes[self._association['fap_state_code']])
+        ac = self._association['association_state_code']
+        if ac in self.state_codes:
+            sc = self.state_codes[ac]
+        else:
+            sc = "Unknown: {}".format(ac)
+        return sc
 
-        except Exception:
-            sc = "{association_state_code}/{fap_state_code}".format(
-                **self._association)
-            print('Unknow state code ', sc)
+    @property
+    def fap_status(self):
+        """ FAP status"""
 
-        try:
-            return "{} - {}".format(
-                self.fap_map[self._fap_status],
-                sc
-            )
-        except IndexError:
-            print("Unknown fap status:", self._fap_status, sc)
-            return "Unknown {} - {}".format(self._fap_status, sc)
-        except Exception:
-            print("Bad status:", self._fap_status, sc)
-            return "Bad status"
+        if self._last_error:
+            return self._last_error
+
+        fc = self._association['fap_state_code']
+        fs = self._fap_status
+
+        if fc == '0.0.0' and fs == 0:  # Normal FAP Status
+            return 'OK'
+
+        if fc in self.state_codes:
+            sc = self.state_codes[fc]
+        else:
+            sc = fc
+        if fs in self.fap_codes:
+            sc += " - " + self.fap_codes[fs]
+        else:
+            sc += " - " + str(fs)
+        return sc
 
     @property
     def update_time(self):
