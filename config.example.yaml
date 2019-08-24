@@ -13,5 +13,3 @@ program:
  IP: 192.168.0.1
  auto_update: True
  start_minimized: False
- x_pos: 1555.0
- y_pos: 809.0

@@ -38,7 +38,41 @@ Author: Brian Millham
     <property name="can_focus">False</property>
     <property name="pixbuf">resources/images/down_on.png</property>
   </object>
-  <object class="GtkImage" id="image1">
+  <object class="GtkStatusIcon" id="ind_image">
+    <property name="file">resources/icons/hnmodem100x100.png</property>
+    <property name="visible">False</property>
+  </object>
+  <object class="GtkMenu" id="ind_menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="aboutmenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">About</property>
+        <signal name="activate" handler="about_item" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="refreshmenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Refresh</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="populate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="quitmenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Quit</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_window1_destroy" swapped="no"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkImage" id="refreshimage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-refresh</property>
@@ -56,174 +90,12 @@ Author: Brian Millham
       <placeholder/>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox" id="mainbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkGrid" id="grid1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="column_homogeneous">True</property>
-            <child>
-              <object class="GtkLabel" id="label4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Tokens Available: </property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="tokens_available_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Data Remaining: </property>
-                <property name="justify">right</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Signal Strength: </property>
-                <property name="justify">right</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Status: </property>
-                <property name="justify">right</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="data_remaining_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin_right">13</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="signal_strength_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="wrap">True</property>
-                <property name="ellipsize">middle</property>
-                <property name="max_width_chars">40</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Current Usage Information @ </property>
-                <property name="justify">right</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="status_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="wrap">True</property>
-                <property name="ellipsize">middle</property>
-                <property name="max_width_chars">40</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="update_time_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="estlabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Estimated Use: </property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="estimated_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box2">
+          <object class="GtkBox" id="buttonsbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="homogeneous">True</property>
@@ -233,7 +105,7 @@ Author: Brian Millham
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="image">image1</property>
+                <property name="image">refreshimage</property>
                 <signal name="toggled" handler="on_auto_refresh_button_toggled" swapped="no"/>
               </object>
               <packing>
@@ -258,7 +130,7 @@ Author: Brian Millham
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="quitbutton">
                 <property name="label">gtk-quit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -277,11 +149,313 @@ Author: Brian Millham
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="statusbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox" id="usagebox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkLabel" id="usage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Current Usage Information @ </property>
+                    <property name="justify">right</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="update_time_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="statusbo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkBox" id="associationbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">1</property>
+                    <child>
+                      <object class="GtkLabel" id="associationstatus">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Association Status: </property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="association_status_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">OK</property>
+                        <property name="wrap">True</property>
+                        <property name="ellipsize">middle</property>
+                        <signal name="query-tooltip" handler="set-tooltip" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="fapbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">1</property>
+                    <child>
+                      <object class="GtkLabel" id="fapstatus">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">FAP Status: </property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="fap_status_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">OK</property>
+                        <property name="ellipsize">end</property>
+                        <property name="single_line_mode">True</property>
+                        <signal name="query-tooltip" handler="set-tooltip" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="ssbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkLabel" id="signalstrength">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Signal Strength: </property>
+                    <property name="justify">right</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="signal_strength_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="wrap">True</property>
+                    <property name="ellipsize">middle</property>
+                    <property name="max_width_chars">40</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="databox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkLabel" id="dataremaining">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Data Remaining: </property>
+                    <property name="justify">right</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="data_remaining_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin_right">13</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="tokensbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkLabel" id="tokensavailable">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Tokens Available: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="tokens_available_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="estimatedbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkLabel" id="estlabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Estimated Use: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="estimated_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkBox" id="progressbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -310,7 +484,7 @@ Author: Brian Millham
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box4">
+              <object class="GtkBox" id="bonusbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -344,7 +518,7 @@ Author: Brian Millham
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box5">
+              <object class="GtkBox" id="allowancebox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -378,7 +552,7 @@ Author: Brian Millham
               </packing>
             </child>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkGrid" id="transferbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="column_homogeneous">True</property>
@@ -398,7 +572,7 @@ Author: Brian Millham
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="stock">gtk-dialog-error</property>
+                    <property name="pixbuf">resources/images/down_off.png</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -422,7 +596,7 @@ Author: Brian Millham
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="stock">gtk-dialog-error</property>
+                    <property name="pixbuf">resources/images/up_off.png</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -441,7 +615,7 @@ Author: Brian Millham
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
@@ -488,41 +662,8 @@ Author: Brian Millham
       </object>
     </child>
   </object>
-  <object class="GtkStatusIcon" id="ind_image">
-    <property name="file">resources/icons/hnmodem100x100.png</property>
-    <property name="visible">False</property>
-  </object>
-  <object class="GtkMenu" id="ind_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">About</property>
-        <signal name="activate" handler="about_item" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Refresh</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="populate" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Quit</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="on_window1_destroy" swapped="no"/>
-      </object>
-    </child>
-  </object>
   <object class="GtkImage" id="up_off">
+    <property name="name">up_off</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">resources/images/up_off.png</property>

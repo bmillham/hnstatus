@@ -16,7 +16,7 @@ class HnModemStatus:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, ip='192.168.0.1'):
+    def __init__(self, ip='192.168.0.1', state_codes=None):
         self.wan = "http://{}/api/home/status/wan".format(ip)
         self.satellite = "http://{}/api/home/status/satellite".format(ip)
         self.usage = "http://{}/api/home/usage".format(ip)
@@ -45,12 +45,17 @@ class HnModemStatus:
         self._last_tx_period = 0
         self._fap_status = -1
         self.estimated_use = 0
-        self.fap_map = ['OK', 'Bonus', 'Unknown', 'Throttled']
-        self.state_map = {
-            '0.0.0': 'Fully operational',
-            '24.1.1': 'Download throttled',
-            'unknown': ''
-            }
+        self.state_codes = state_codes
+        self.fap_codes = {0: 'OK',
+                          1: 'Bonus',
+                          3: 'Throttled',
+                          4: 'Not Associated'}
+
+        if not self.state_codes:
+            self.state_codes = {
+                '0.0.0': 'Fully operational',
+                '24.1.1': 'Download throttled',
+                'unknown': ''}
 
     def get_json(self, json_page=None):
         """ Read a json page and handle errors """
@@ -169,28 +174,41 @@ class HnModemStatus:
         return s
 
     @property
-    def status(self):
-        """ The current status """
+    def association_status(self):
+        """ Association status"""
 
         if self._last_error:
-            return "{}".format(self._last_error)
+            return self._last_error
 
-        try:
-            sc = self.state_map[self._association['fap_state_code']]
-        except Exception:
-            print('Unknow state map: ', self._association)
-            sc = self._association['fap_state_code']
-        try:
-            return "{} - {}".format(
-                self.fap_map[self._fap_status],
-                sc
-            )
-        except IndexError:
-            print("Unknown fap status:", self._fap_status, sc)
-            return "Unknown {} - {}".format(self._fap_status, sc)
-        except Exception:
-            print("Bad status:", self._fap_status, sc)
-            return "Bad status"
+        ac = self._association['association_state_code']
+        if ac in self.state_codes:
+            sc = self.state_codes[ac]
+        else:
+            sc = "Unknown: {}".format(ac)
+        return sc
+
+    @property
+    def fap_status(self):
+        """ FAP status"""
+
+        if self._last_error:
+            return self._last_error
+
+        fc = self._association['fap_state_code']
+        fs = self._fap_status
+
+        if fc == '0.0.0' and fs == 0:  # Normal FAP Status
+            return 'OK'
+
+        if fc in self.state_codes:
+            sc = self.state_codes[fc]
+        else:
+            sc = fc
+        if fs in self.fap_codes:
+            sc += " - " + self.fap_codes[fs]
+        else:
+            sc += " - " + str(fs)
+        return sc
 
     @property
     def update_time(self):
