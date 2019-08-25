@@ -78,6 +78,18 @@ Author: Brian Millham
       </object>
     </child>
   </object>
+  <object class="GtkImage" id="modem_image">
+    <property name="name">modem_image</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">resources/icons/hnmodem100x100.png</property>
+  </object>
+  <object class="GtkImage" id="network_down_image">
+    <property name="name">network_down_image</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">resources/icons/hnmodem-down.png</property>
+  </object>
   <object class="GtkImage" id="refreshimage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>

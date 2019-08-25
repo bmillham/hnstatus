@@ -83,8 +83,6 @@ class HnModemStatus:
     def fetch_current_stats(self):
         """ Get the current stats from the modem, no parsing of the stats """
 
-        self._last_error = None
-
         wan = self.get_json(self.wan)
         satellite = self.get_json(self.satellite)
         usage = self.get_json(self.usage)
@@ -93,14 +91,17 @@ class HnModemStatus:
 
         for r in (wan[1], satellite[1], usage[1], association[1]):
             if r:
+                if r != self._last_error:
+                    self._clear_stats(reason=r)
                 self._last_error = r
-                self._clear_stats(reason=r)
                 return
 
+        self._last_error = None
         self._wan = wan[0]
         self._satellite = satellite[0]
         self._usage = usage[0]
         self._association = association[0]
+        self._status = None
 
         # Uncomment these lines to see the amount to data read from the modem
         # bytes_returned = len(str(wan[0])) + \

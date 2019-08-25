@@ -98,7 +98,8 @@ class Icon(object):
             anytime,
             ss,
             tx,
-            rx):
+            rx,
+            status):
         if not self.indicator:  # No nothing if there is no statusicon
             return
 
@@ -107,16 +108,17 @@ class Icon(object):
         self.real_ss = self.ss = self._sanitize(ss)
 
         # Check for down status
-        if not self.bonus and not self.anytime and not self.ss:
+        #if not self.bonus and not self.anytime and not self.ss:
+        if status:
             if self.last_icon != self.downicon:
-                self.indicator.set_from_file(self.downicon)
+                self.indicator.set_from_pixbuf(self.downicon.get_pixbuf())
                 self.last_icon = self.downicon
             return
 
         # If PIL was not imported, display the stock icon
         if not Image:
             if self.last_icon != self.defaulticon:
-                self.indicator.set_from_file(self.defaulticon)
+                self.indicator.set_from_pixbuf(self.defaulticon.get_pixbuf())
                 self.last_icon = self.defaulticon
             return
 

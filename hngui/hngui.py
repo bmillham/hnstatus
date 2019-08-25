@@ -76,15 +76,15 @@ class HnGui():
         self.normal_color = None
 
         # Setup the appindicator
-        self.downicon = os.path.join(path,
-                                     'resources/icons/hnmodem-down100x100.png')
-        self.defaulticon = os.path.join(path,
-                                        'resources/icons/hnmodem100x100.png')
+        #self.downicon = os.path.join(path,
+        #                             'resources/icons/hnmodem-down100x100.png')
+        #self.defaulticon = os.path.join(path,
+        #                                'resources/icons/hnmodem100x100.png')
         self.statusicon = Gtk.StatusIcon()
         self.statusicon.connect("popup-menu", self.right_click_event)
         self.statusicon.connect("button-press-event", self.button_press_event)
         self.statusicon.set_tooltip_text("hnstatus")
-        self.statusicon.set_from_file(self.defaulticon)
+        self.statusicon.set_from_pixbuf(self.o['modem_image'].get_pixbuf())
 
         Notify.init('hnstatus-appindicator')
 
@@ -117,7 +117,12 @@ class HnGui():
         def pos(menu, x, y, icon):
             return (Gtk.StatusIcon.position_menu(menu, x, y, icon))
 
-        self.o['ind_menu'].popup(None, None, pos, self.statusicon, button, time)
+        self.o['ind_menu'].popup(None,
+                                 None,
+                                 pos,
+                                 self.statusicon,
+                                 button,
+                                 time)
 
     def window_state_event(self, w, s):
         if 'iconified' in s.new_window_state.value_nicks:
@@ -186,19 +191,20 @@ class HnGui():
                              width=33,
                              arrowheight=15,
                              indicator=self.statusicon,
-                             downicon=self.downicon,
+                             downicon=self.o['network_down_image'],
                              bonus_color=self.bonus_color,
                              anytime_color=self.anytime_color,
                              ss_colors=self.ss_colors,
                              tx_rx_colors=self.tx_rx_colors,
                              background_color=self.background_color,
-                             defaulticon=self.defaulticon)
+                             defaulticon=self.o['modem_image'])
 
         self.icon.new(self.hnstat.bonus_percent_remaining,
                       self.hnstat.anytime_percent_remaining,
                       self.hnstat.signal_strength,
                       self.hnstat._last_tx,
-                      self.hnstat._last_rx)
+                      self.hnstat._last_rx,
+                      self.hnstat.status_raw)
 
     def _set_tooltip(self, widget, x, y, keyboard, tooltip):
         txt = widget.get_text()
@@ -268,9 +274,11 @@ class HnGui():
         # Notify about connection errors.
         if self.hnstat.status_raw != 'OK':
             if self.hnstat.status_raw != self._last_status_warning:
+                status = "Association: {}, FAP: {}".format(
+                    self.hnstat.association_status,
+                    self.hnstat.fap_status)
                 Notify.Notification.new('hn Modem Status:',
-                                        self.hnstat.association_status,
-                                        self.hnstat.fap_status,
+                                        status,
                                         None).show()
                 self._last_status_warning = self.hnstat.status_raw
         else:
