@@ -29,11 +29,13 @@ Author: Brian Millham
   <!-- interface-copyright 2017 -->
   <!-- interface-authors Brian Millham -->
   <object class="GtkImage" id="down_off">
+    <property name="name">down_off_image</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">resources/images/down_off.png</property>
   </object>
   <object class="GtkImage" id="down_on">
+    <property name="name">down_on_image</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">resources/images/down_on.png</property>
@@ -43,10 +45,12 @@ Author: Brian Millham
     <property name="visible">False</property>
   </object>
   <object class="GtkMenu" id="ind_menu">
+    <property name="name">ind_menu</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
       <object class="GtkMenuItem" id="aboutmenu">
+        <property name="name">aboutmenu</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">About</property>
@@ -55,6 +59,7 @@ Author: Brian Millham
     </child>
     <child>
       <object class="GtkMenuItem" id="refreshmenu">
+        <property name="name">refreshmenu</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Refresh</property>
@@ -64,6 +69,7 @@ Author: Brian Millham
     </child>
     <child>
       <object class="GtkMenuItem" id="quitmenu">
+        <property name="name">quitmenu</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Quit</property>
@@ -78,6 +84,7 @@ Author: Brian Millham
     <property name="stock">gtk-refresh</property>
   </object>
   <object class="GtkWindow" id="window1">
+    <property name="name">window1</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">HNStatus</property>
     <property name="window_position">center</property>
@@ -102,6 +109,7 @@ Author: Brian Millham
             <child>
               <object class="GtkToggleButton" id="auto_refresh_button">
                 <property name="label" translatable="yes">Auto Refresh</property>
+                <property name="name">auto_refresh_button</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -121,7 +129,7 @@ Author: Brian Millham
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="about_item" swapped="no"/>
+                <signal name="clicked" handler="about_item" object="abouthnstatus" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -178,6 +186,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="update_time_label">
+                    <property name="name">update_time_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -196,7 +205,7 @@ Author: Brian Millham
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="statusbo">
+              <object class="GtkBox" id="statebox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -221,11 +230,12 @@ Author: Brian Millham
                     </child>
                     <child>
                       <object class="GtkLabel" id="association_status_label">
+                        <property name="name">association_status_label</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">OK</property>
+                        <property name="label" translatable="yes">Unknown</property>
                         <property name="wrap">True</property>
                         <property name="ellipsize">middle</property>
                         <signal name="query-tooltip" handler="set-tooltip" swapped="no"/>
@@ -264,6 +274,7 @@ Author: Brian Millham
                     </child>
                     <child>
                       <object class="GtkLabel" id="fap_status_label">
+                        <property name="name">fap_status_label</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
@@ -314,6 +325,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="signal_strength_label">
+                    <property name="name">signal_strength_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -355,6 +367,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="data_remaining_label">
+                    <property name="name">data_remaining_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -393,6 +406,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="tokens_available_label">
+                    <property name="name">tokens_available_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -430,6 +444,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="estimated_label">
+                    <property name="name">estimated_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -461,6 +476,7 @@ Author: Brian Millham
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkProgressBar" id="anytime_progress">
+                <property name="name">anytime_progress</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="show_text">True</property>
@@ -473,6 +489,7 @@ Author: Brian Millham
             </child>
             <child>
               <object class="GtkProgressBar" id="bonus_progress">
+                <property name="name">bonus_progress</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="show_text">True</property>
@@ -501,6 +518,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="bonus_start_label">
+                    <property name="name">bonus_start_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -535,6 +553,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="allowance_resets_label">
+                    <property name="name">allowance_resets_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -558,6 +577,7 @@ Author: Brian Millham
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="tx_label">
+                    <property name="name">tx_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -569,6 +589,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkImage" id="down_image">
+                    <property name="name">down_image</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -582,6 +603,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkLabel" id="rx_label">
+                    <property name="name">rx_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -593,6 +615,7 @@ Author: Brian Millham
                 </child>
                 <child>
                   <object class="GtkImage" id="up_image">
+                    <property name="name">up_image</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -622,6 +645,7 @@ Author: Brian Millham
     </child>
   </object>
   <object class="GtkAboutDialog" id="abouthnstatus">
+    <property name="name">abouthnstatus</property>
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
@@ -656,19 +680,17 @@ Author: Brian Millham
             <property name="position">0</property>
           </packing>
         </child>
-        <child>
-          <placeholder/>
-        </child>
       </object>
     </child>
   </object>
   <object class="GtkImage" id="up_off">
-    <property name="name">up_off</property>
+    <property name="name">up_off_image</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">resources/images/up_off.png</property>
   </object>
   <object class="GtkImage" id="up_on">
+    <property name="name">up_on_image</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">resources/images/up_on.png</property>

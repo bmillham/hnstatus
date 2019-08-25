@@ -45,41 +45,22 @@ class HnGui():
         self.config_file = config_file
 
         self.gtk = Gtk
+        self.__o = {}
 
         builder = self.gtk.Builder()
         builder.add_from_file(file)
         builder.connect_signals(signals)
 
-        # Get the objects that we will use
-        self.window1 = builder.get_object('window1')
-        self.about_window = builder.get_object('abouthnstatus')
-        self.association_status_label = builder.get_object('association_status_label')
-        self.fap_status_label = builder.get_object('fap_status_label')
-        self.data_remaining_label = builder.get_object('data_remaining_label')
-        self.tokens_available_label = builder.get_object('tokens_available_label')  # noqa: E501
-        self.anytime_remaining_label = builder.get_object('anytime_remaining_label')  # noqa: E501
-        self.allowance_resets_label = builder.get_object('allowance_resets_label')  # noqa: E501
-        self.bonus_progress = builder.get_object('bonus_progress')
-        self.anytime_progress = builder.get_object('anytime_progress')
-        self.bonus_start_label = builder.get_object('bonus_start_label')
-        self.signal_strength_label = builder.get_object('signal_strength_label')  # noqa: E501
-        self.auto_refresh_button = builder.get_object('auto_refresh_button')
-        self.rx_label = builder.get_object('rx_label')
-        self.tx_label = builder.get_object('tx_label')
-        self.up_image = builder.get_object('up_image')
-        self.up_off_image = builder.get_object('up_off')
-        self.up_on_image = builder.get_object('up_on')
-        self.down_image = builder.get_object('down_image')
-        self.down_off_image = builder.get_object('down_off')
-        self.down_on_image = builder.get_object('down_on')
-        self.update_time_label = builder.get_object('update_time_label')
-        self.estimated_use_label = builder.get_object('estimated_label')
-        self.menu = builder.get_object('ind_menu')
+        # Get all named objects
+        for obj in builder.get_objects():
+            self.o = obj
+
         self.update_interval = update_interval
         self.icon = None
 
         template = ["hnStatus",
-                    "Association Status: {} FAP Status {}",
+                    "Association Status: {}",
+                    "FAP Status {}",
                     "Signal Strength: {}",
                     "Anytime Remaining: {} ({:.02f}%)",
                     "Bonus Remaining: {} ({:.02f}%)",
@@ -112,19 +93,31 @@ class HnGui():
         self.window1_disable_move = False
         self.window1_coords = (True, window_x, window_y)
 
+    @property
+    def o(self):
+        return self.__o
+
+    @o.setter
+    def o(self, object):
+        try:
+            name = object.get_name()
+        except AttributeError:
+            name = type(object).__name__
+        self.__o[name] = object
+
     def about(self, widget):
-        self.about_window.show_all()
+        widget.show()
 
     def about_close_handler(self, widget, status):
-        self.about_window.hide()
+        widget.hide()
 
     def right_click_event(self, icon, button, time):
-        self.menu.show_all()
+        self.o['ind_menu'].show_all()
 
         def pos(menu, x, y, icon):
             return (Gtk.StatusIcon.position_menu(menu, x, y, icon))
 
-        self.menu.popup(None, None, pos, self.statusicon, button, time)
+        self.o['ind_menu'].popup(None, None, pos, self.statusicon, button, time)
 
     def window_state_event(self, w, s):
         if 'iconified' in s.new_window_state.value_nicks:
@@ -133,7 +126,7 @@ class HnGui():
     def button_press_event(self, icon, button):
         b = button.get_button()[1]
         if b == 1:
-            if self.window1.is_visible():
+            if self.o['window1'].is_visible():
                 self.hide(icon)
             else:
                 self.show(icon)
@@ -148,7 +141,7 @@ class HnGui():
             import yaml
             with open(self.config_file) as f:
                 config = yaml.load(f)
-            pos = self.window1.get_position()
+            pos = self.o['window1'].get_position()
             if config['program']['y_pos'] - pos.root_y:
                 config['program']['y_pos'] = pos.root_y + 5
             config['program']['x_pos'] = pos.root_x
@@ -176,15 +169,15 @@ class HnGui():
     def show(self, widget):
         self.window1_disable_move = True
         self.window1_is_moving = False
-        self.window1.deiconify()
-        self.window1.set_visible(True)
-        self.window1.move(self.window1_coords[1], self.window1_coords[2])
+        self.o['window1'].deiconify()
+        self.o['window1'].set_visible(True)
+        self.o['window1'].move(self.window1_coords[1], self.window1_coords[2])
         self.window1_is_moving = False
         self.window1_disable_move = False
 
     def hide(self, widget):
         self.window1_disable_move = True
-        self.window1.set_visible(False)
+        self.o['window1'].set_visible(False)
         self.window1_is_moving = False
 
     def set_icon(self):
@@ -216,48 +209,50 @@ class HnGui():
     def populate(self, force=False):
         """ Populate the GUI with the current status """
 
-        self.hnstat.fetch_current_stats()
+        h = self.hnstat
+        h.fetch_current_stats()
 
-        self.association_status_label.set_text(self.hnstat.association_status)
-        self.fap_status_label.set_text(self.hnstat.fap_status)
-        self.data_remaining_label.set_text(self.hnstat.data_remaining)
-        self.tokens_available_label.set_text(self.hnstat.tokens_available)
-        self.allowance_resets_label.set_text(self.hnstat.allowance_reset)
-        self.anytime_progress.set_fraction(
-            self.hnstat.anytime_percent_remaining / 100)
+        self.o['association_status_label'].set_text(h.association_status)
+        self.o['fap_status_label'].set_text(h.fap_status)
+        self.o['data_remaining_label'].set_text(h.data_remaining)
+        self.o['tokens_available_label'].set_text(h.tokens_available)
+        self.o['allowance_resets_label'].set_text(h.allowance_reset)
+        self.o['anytime_progress'].set_fraction(
+            h.anytime_percent_remaining / 100)
 
-        if self.hnstat.anytime_percent_remaining < self.hnstat.estimated_use:
+        if h.anytime_percent_remaining < h.estimated_use:
             color = self.highlight_color
         else:
             color = self.normal_color
-        self.anytime_progress.override_color(Gtk.StateType.NORMAL,
-                                             color)
-        self.anytime_progress.set_text(self.hnstat.anytime_info)
-        self.bonus_progress.set_fraction(
-            self.hnstat.bonus_percent_remaining / 100)
+        self.o['anytime_progress'].override_color(Gtk.StateType.NORMAL, color)
+        self.o['anytime_progress'].set_text(h.anytime_info)
+        self.o['bonus_progress'].set_fraction(h.bonus_percent_remaining / 100)
 
-        if self.hnstat.bonus_percent_remaining < self.hnstat.estimated_use:
+        if h.bonus_percent_remaining < h.estimated_use:
             color = self.highlight_color
         else:
             color = self.normal_color
-        self.bonus_progress.override_color(Gtk.StateType.NORMAL,
-                                           color)
+        self.o['bonus_progress'].override_color(Gtk.StateType.NORMAL, color)
 
-        self.bonus_progress.set_text(self.hnstat.bonus_info)
-        self.bonus_start_label.set_text(self.hnstat.bonus_start)
-        self.signal_strength_label.set_text(self.hnstat.signal_strength)
-        self.rx_label.set_text(self.hnstat.last_rx)
-        self.tx_label.set_text(self.hnstat.last_tx)
-        self.update_time_label.set_text(self.hnstat.update_time)
+        self.o['bonus_progress'].set_text(h.bonus_info)
+        self.o['bonus_start_label'].set_text(h.bonus_start)
+        self.o['signal_strength_label'].set_text(h.signal_strength)
+        self.o['rx_label'].set_text(self.hnstat.last_rx)
+        self.o['tx_label'].set_text(self.hnstat.last_tx)
+        self.o['update_time_label'].set_text(h.update_time)
         if self.hnstat._last_tx == 0:
-            self.up_image.set_from_pixbuf(self.up_off_image.get_pixbuf())
+            self.o['up_image'].set_from_pixbuf(
+                self.o['up_off_image'].get_pixbuf())
         else:
-            self.up_image.set_from_pixbuf(self.up_on_image.get_pixbuf())
+            self.o['up_image'].set_from_pixbuf(
+                self.o['up_on_image'].get_pixbuf())
         if self.hnstat._last_rx == 0:
-            self.down_image.set_from_pixbuf(self.down_off_image.get_pixbuf())
+            self.o['down_image'].set_from_pixbuf(
+                self.o['down_off_image'].get_pixbuf())
         else:
-            self.down_image.set_from_pixbuf(self.down_on_image.get_pixbuf())
-        self.estimated_use_label.set_text("{:.02f}%".format(
+            self.o['down_image'].set_from_pixbuf(
+                self.o['down_on_image'].get_pixbuf())
+        self.o['estimated_label'].set_text("{:.02f}%".format(
             self.hnstat.estimated_use))
         self.set_icon()
 
@@ -274,7 +269,9 @@ class HnGui():
         if self.hnstat.status_raw != 'OK':
             if self.hnstat.status_raw != self._last_status_warning:
                 Notify.Notification.new('hn Modem Status:',
-                                        self.hnstat.status, None).show()
+                                        self.hnstat.association_status,
+                                        self.hnstat.fap_status,
+                                        None).show()
                 self._last_status_warning = self.hnstat.status_raw
         else:
             self._last_status_warning = None
