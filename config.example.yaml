@@ -1,5 +1,6 @@
 # Colors must match HTML colors and are not case sensitive.
 # Hex formatting: i.e. #ff0000 may be used but must be quoted.
+# Rename this file as config.yaml and modify to your prefrences
 
 colors:
  bonus_color: blue
