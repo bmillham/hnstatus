@@ -120,15 +120,14 @@ class HnGui():
 
         def pos(menu, x, y, icon):
             p = Gtk.StatusIcon.position_menu(menu, x, y, icon)
-            print(p)
             return p
 
         self.o.ind_menu.popup(None,
-                                 None,
-                                 pos,
-                                 self.statusicon,
-                                 button,
-                                 time)
+                              None,
+                              pos,
+                              self.statusicon,
+                              button,
+                              time)
 
     def window_state_event(self, w, s):
         if 'iconified' in s.new_window_state.value_nicks:
@@ -278,16 +277,25 @@ class HnGui():
             self.hnstat.bonus_percent_remaining,
             self.hnstat.estimated_use))
         # Notify about connection errors.
-        if self.hnstat.status_raw != 'OK':
+        if self.hnstat.status_raw:
             if self.hnstat.status_raw != self._last_status_warning:
                 status = "Association: {}, FAP: {}".format(
                     self.hnstat.association_status,
                     self.hnstat.fap_status)
-                Notify.Notification.new('hn Modem Status:',
-                                        status,
-                                        None).show()
+                n = Notify.Notification.new('hn Modem Status:', status)
+                n.set_image_from_pixbuf(self.o.network_down_image.get_pixbuf())
+                n.set_timeout(10000)
+                n.show()
                 self._last_status_warning = self.hnstat.status_raw
         else:
+            if self._last_status_warning:
+                status = "Association: {}, FAP: {}".format(
+                    self.hnstat.association_status,
+                    self.hnstat.fap_status)
+                n = Notify.Notification.new('hn Modem Status:', status)
+                n.set_image_from_pixbuf(self.o.modem_image.get_pixbuf())
+                n.set_timeout(10000)
+                n.show()
             self._last_status_warning = None
 
         return True
