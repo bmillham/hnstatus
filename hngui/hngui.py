@@ -1,18 +1,26 @@
 """ Build the GUI and handle the signals """
 
-import os
 import gi
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Notify', '0.7')
 
 from hngui.icon import Icon  # noqa: E402
-from gi.repository import Gtk, GObject, Notify, Gdk  # noqa: E402
+from gi.repository import Gtk, GObject, Gdk  # noqa: E402
+
+try:
+    from gi.repository import Notify  # noqa: E402
+except ImportError:
+    print('WARNING: gi.repository.Notify not available.')
+    print('Notifications will not be displayed.')
+    Notify = None
+
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
+
 
 class HnGui():
     """ Builds the Gtk GUI """
@@ -90,7 +98,8 @@ class HnGui():
         self.statusicon.connect("popup-menu", self.right_click_event)
         self.statusicon.connect("button-press-event", self.button_press_event)
 
-        Notify.init('hnstatus-appindicator')
+        if Notify:
+            Notify.init('hnstatus-appindicator')
 
         self.update_interval = update_interval  # Update interval 1s
         self.window1_is_moving = False
@@ -158,7 +167,8 @@ class HnGui():
             with open(self.config_file, "w") as f:
                 yaml.dump(config, f)
 
-        Notify.uninit()
+        if Notify:
+            Notify.uninit()
         self.gtk.main_quit()
 
     def toggle_refresh(self, widget):
@@ -277,7 +287,7 @@ class HnGui():
             self.hnstat.bonus_percent_remaining,
             self.hnstat.estimated_use))
         # Notify about connection errors.
-        if self.hnstat.status_raw:
+        if self.hnstat.status_raw and Notify:
             if self.hnstat.status_raw != self._last_status_warning:
                 status = "Association: {}, FAP: {}".format(
                     self.hnstat.association_status,
@@ -287,7 +297,7 @@ class HnGui():
                 n.set_timeout(10000)
                 n.show()
                 self._last_status_warning = self.hnstat.status_raw
-        else:
+        elif Notify:
             if self._last_status_warning:
                 status = "Association: {}, FAP: {}".format(
                     self.hnstat.association_status,
