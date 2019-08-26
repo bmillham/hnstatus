@@ -9,6 +9,10 @@ gi.require_version('Notify', '0.7')
 from hngui.icon import Icon  # noqa: E402
 from gi.repository import Gtk, GObject, Notify, Gdk  # noqa: E402
 
+class AttrDict(dict):
+    def __init__(self, *args, **kwargs):
+        super(AttrDict, self).__init__(*args, **kwargs)
+        self.__dict__ = self
 
 class HnGui():
     """ Builds the Gtk GUI """
@@ -37,6 +41,8 @@ class HnGui():
             'about_item': self.about,
             'about-close-handler': self.about_close_handler,
             'set-tooltip': self._set_tooltip,
+            'popup-menu': self.right_click_event,
+            'button-press-event': self.button_press_event
         }
 
         self._last_status_warning = None
@@ -45,7 +51,7 @@ class HnGui():
         self.config_file = config_file
 
         self.gtk = Gtk
-        self.__o = {}
+        self.__o = AttrDict()
 
         builder = self.gtk.Builder()
         builder.add_from_file(file)
@@ -80,11 +86,17 @@ class HnGui():
         #                             'resources/icons/hnmodem-down100x100.png')
         #self.defaulticon = os.path.join(path,
         #                                'resources/icons/hnmodem100x100.png')
-        self.statusicon = Gtk.StatusIcon()
-        self.statusicon.connect("popup-menu", self.right_click_event)
-        self.statusicon.connect("button-press-event", self.button_press_event)
-        self.statusicon.set_tooltip_text("hnstatus")
-        self.statusicon.set_from_pixbuf(self.o['modem_image'].get_pixbuf())
+        #self.si = Gtk.StatusIcon()
+        self.statusicon = self.o.StatusIcon
+
+        #self.statusicon.parent_instance(self.o['window1'])
+        self.statusicon.set_visible(True)
+        #print(dir(self.statusicon), dir(self.si))
+        #self.statusicon.connect("popup-menu", self.right_click_event)
+        #self.statusicon.connect("button-press-event", self.button_press_event)
+        #self.statusicon.set_tooltip_text("hnstatus")
+        #self.statusicon.set_from_pixbuf(self.o['modem_image'].get_pixbuf())
+        #self.o['app_window'].show_all()
 
         Notify.init('hnstatus-appindicator')
 
@@ -112,12 +124,14 @@ class HnGui():
         widget.hide()
 
     def right_click_event(self, icon, button, time):
-        self.o['ind_menu'].show_all()
+        self.o.ind_menu.show_all()
 
         def pos(menu, x, y, icon):
-            return (Gtk.StatusIcon.position_menu(menu, x, y, icon))
+            p = Gtk.StatusIcon.position_menu(menu, x, y, icon)
+            print(p)
+            return p
 
-        self.o['ind_menu'].popup(None,
+        self.o.ind_menu.popup(None,
                                  None,
                                  pos,
                                  self.statusicon,
@@ -131,7 +145,7 @@ class HnGui():
     def button_press_event(self, icon, button):
         b = button.get_button()[1]
         if b == 1:
-            if self.o['window1'].is_visible():
+            if self.o.window1.is_visible():
                 self.hide(icon)
             else:
                 self.show(icon)
@@ -146,7 +160,7 @@ class HnGui():
             import yaml
             with open(self.config_file) as f:
                 config = yaml.load(f)
-            pos = self.o['window1'].get_position()
+            pos = self.o.window1.get_position()
             if config['program']['y_pos'] - pos.root_y:
                 config['program']['y_pos'] = pos.root_y + 5
             config['program']['x_pos'] = pos.root_x
@@ -174,15 +188,15 @@ class HnGui():
     def show(self, widget):
         self.window1_disable_move = True
         self.window1_is_moving = False
-        self.o['window1'].deiconify()
-        self.o['window1'].set_visible(True)
-        self.o['window1'].move(self.window1_coords[1], self.window1_coords[2])
+        self.o.window1.deiconify()
+        self.o.window1.set_visible(True)
+        self.o.window1.move(self.window1_coords[1], self.window1_coords[2])
         self.window1_is_moving = False
         self.window1_disable_move = False
 
     def hide(self, widget):
         self.window1_disable_move = True
-        self.o['window1'].set_visible(False)
+        self.o.window1.set_visible(False)
         self.window1_is_moving = False
 
     def set_icon(self):
@@ -218,47 +232,47 @@ class HnGui():
         h = self.hnstat
         h.fetch_current_stats()
 
-        self.o['association_status_label'].set_text(h.association_status)
-        self.o['fap_status_label'].set_text(h.fap_status)
-        self.o['data_remaining_label'].set_text(h.data_remaining)
-        self.o['tokens_available_label'].set_text(h.tokens_available)
-        self.o['allowance_resets_label'].set_text(h.allowance_reset)
-        self.o['anytime_progress'].set_fraction(
+        self.o.association_status_label.set_text(h.association_status)
+        self.o.fap_status_label.set_text(h.fap_status)
+        self.o.data_remaining_label.set_text(h.data_remaining)
+        self.o.tokens_available_label.set_text(h.tokens_available)
+        self.o.allowance_resets_label.set_text(h.allowance_reset)
+        self.o.anytime_progress.set_fraction(
             h.anytime_percent_remaining / 100)
 
         if h.anytime_percent_remaining < h.estimated_use:
             color = self.highlight_color
         else:
             color = self.normal_color
-        self.o['anytime_progress'].override_color(Gtk.StateType.NORMAL, color)
-        self.o['anytime_progress'].set_text(h.anytime_info)
-        self.o['bonus_progress'].set_fraction(h.bonus_percent_remaining / 100)
+        self.o.anytime_progress.override_color(Gtk.StateType.NORMAL, color)
+        self.o.anytime_progress.set_text(h.anytime_info)
+        self.o.bonus_progress.set_fraction(h.bonus_percent_remaining / 100)
 
         if h.bonus_percent_remaining < h.estimated_use:
             color = self.highlight_color
         else:
             color = self.normal_color
-        self.o['bonus_progress'].override_color(Gtk.StateType.NORMAL, color)
+        self.o.bonus_progress.override_color(Gtk.StateType.NORMAL, color)
 
-        self.o['bonus_progress'].set_text(h.bonus_info)
-        self.o['bonus_start_label'].set_text(h.bonus_start)
-        self.o['signal_strength_label'].set_text(h.signal_strength)
-        self.o['rx_label'].set_text(self.hnstat.last_rx)
-        self.o['tx_label'].set_text(self.hnstat.last_tx)
-        self.o['update_time_label'].set_text(h.update_time)
+        self.o.bonus_progress.set_text(h.bonus_info)
+        self.o.bonus_start_label.set_text(h.bonus_start)
+        self.o.signal_strength_label.set_text(h.signal_strength)
+        self.o.rx_label.set_text(self.hnstat.last_rx)
+        self.o.tx_label.set_text(self.hnstat.last_tx)
+        self.o.update_time_label.set_text(h.update_time)
         if self.hnstat._last_tx == 0:
-            self.o['up_image'].set_from_pixbuf(
-                self.o['up_off_image'].get_pixbuf())
+            self.o.up_image.set_from_pixbuf(
+                self.o.up_off_image.get_pixbuf())
         else:
-            self.o['up_image'].set_from_pixbuf(
-                self.o['up_on_image'].get_pixbuf())
+            self.o.up_image.set_from_pixbuf(
+                self.o.up_on_image.get_pixbuf())
         if self.hnstat._last_rx == 0:
-            self.o['down_image'].set_from_pixbuf(
-                self.o['down_off_image'].get_pixbuf())
+            self.o.down_image.set_from_pixbuf(
+                self.o.down_off_image.get_pixbuf())
         else:
-            self.o['down_image'].set_from_pixbuf(
-                self.o['down_on_image'].get_pixbuf())
-        self.o['estimated_label'].set_text("{:.02f}%".format(
+            self.o.down_image.set_from_pixbuf(
+                self.o.down_on_image.get_pixbuf())
+        self.o.estimated_label.set_text("{:.02f}%".format(
             self.hnstat.estimated_use))
         self.set_icon()
 

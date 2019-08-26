@@ -164,15 +164,15 @@ if __name__ == '__main__':
 
     # Restore saved position
     if 'x_pos' in program and 'y_pos' in program:
-        gui.o['window1'].move(program['x_pos'], program['y_pos'])
+        gui.o.window1.move(program['x_pos'], program['y_pos'])
 
     # Display the GUI
     if not program['start_minimized']:
-        gui.o['window1'].show_all()
+        gui.o.window1.show_all()
 
     # Set autorefresh
     if program['auto_update']:
-        gui.o['auto_refresh_button'].set_active(True)
+        gui.o.auto_refresh_button.set_active(True)
 
     # Run Gtk
-    rc = gui.gtk.main()
+    gui.gtk.main()
