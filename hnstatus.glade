@@ -45,8 +45,6 @@ Author: Brian Millham
     <property name="visible">False</property>
     <property name="tooltip_text" translatable="yes">hnStatus</property>
     <property name="title" translatable="yes">hnStatus</property>
-    <signal name="button-press-event" handler="button-press-event" swapped="no"/>
-    <signal name="popup-menu" handler="popup-menu" object="ind_menu" swapped="no"/>
   </object>
   <object class="GtkMenu" id="ind_menu">
     <property name="name">ind_menu</property>

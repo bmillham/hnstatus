@@ -81,22 +81,14 @@ class HnGui():
         self.highlight_color.parse('red')
         self.normal_color = None
 
-        # Setup the appindicator
-        #self.downicon = os.path.join(path,
-        #                             'resources/icons/hnmodem-down100x100.png')
-        #self.defaulticon = os.path.join(path,
-        #                                'resources/icons/hnmodem100x100.png')
-        #self.si = Gtk.StatusIcon()
-        self.statusicon = self.o.StatusIcon
+        # Setup the StatusIcon
 
-        #self.statusicon.parent_instance(self.o['window1'])
+        # Have to create a new instance to prevent a Gdk errorn
+        self.statusicon = self.o.StatusIcon.new()
         self.statusicon.set_visible(True)
-        #print(dir(self.statusicon), dir(self.si))
-        #self.statusicon.connect("popup-menu", self.right_click_event)
-        #self.statusicon.connect("button-press-event", self.button_press_event)
-        #self.statusicon.set_tooltip_text("hnstatus")
-        #self.statusicon.set_from_pixbuf(self.o['modem_image'].get_pixbuf())
-        #self.o['app_window'].show_all()
+        # Manually connect the signals
+        self.statusicon.connect("popup-menu", self.right_click_event)
+        self.statusicon.connect("button-press-event", self.button_press_event)
 
         Notify.init('hnstatus-appindicator')
 
