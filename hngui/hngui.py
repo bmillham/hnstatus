@@ -3,18 +3,17 @@
 import gi
 
 gi.require_version('Gtk', '3.0')
-gi.require_version('Notify', '0.7')
 
 from hngui.icon import Icon  # noqa: E402
 from gi.repository import Gtk, GObject, Gdk  # noqa: E402
 
 try:
+    gi.require_version('Notify', '0.7')
     from gi.repository import Notify  # noqa: E402
-except ImportError:
+except (ImportError, ValueError):
     print('WARNING: gi.repository.Notify not available.')
     print('Notifications will not be displayed.')
     Notify = None
-
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
