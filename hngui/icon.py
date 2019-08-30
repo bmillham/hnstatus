@@ -62,7 +62,8 @@ class Icon(object):
         fixed_color = []
         i = 0
         for c in color:
-            c = c.strip()  # Get rid of extra spaces
+            #c = c.strip()  # Get rid of extra spaces
+            c = c.replace(" ", "")
             try:
                 ImageColor.getrgb(c)
             except ValueError:
@@ -158,25 +159,45 @@ class Icon(object):
 
     def _sanitize(self, value):
         try:
-            v = int(value)
+            v = float(value)
         except Exception:
             v = 0
         return v
 
     def _bonusline(self):
+        if self.bonus < 1.0:
+            bonus = self.bonus * 100.0
+            color = self._verify_color(['Medium Slate Blue'], ['blue'])
+        elif self.bonus < 10.0:
+            bonus = self.bonus * 10.0
+            color = self._verify_color(['Dark Turquoise'], ['blue'])
+        else:
+            bonus = self.bonus
+            color = self.bonus_color
+
         self.draw.rectangle((self.space,
-                             100-self.bonus,
+                             100-bonus,
                              self.width,
                              100),
-                            fill=self.bonus_color)
+                            fill=color)
 
     def _anytimeline(self):
         offset = self.width + self.space
+        if self.anytime < 1.0:
+            anytime = self.anytime * 100.0
+            color = self._verify_color(['Olive'], ['green'])
+        if self.anytime < 10:
+            anytime = self.anytime * 10
+            color = self._verify_color(['Lawn Green'], ['green'])
+        else:
+            anytime = self.anytime
+            color = self.anytime_color
+
         self.draw.rectangle((offset,
-                             100-self.anytime,
+                             100-anytime,
                              self.width + offset - self.space,
                              100),
-                            fill=self.anytime_color)
+                            fill=color)
 
     def _ssline(self):
         if self.ss < (self.arrowheight * 2):
