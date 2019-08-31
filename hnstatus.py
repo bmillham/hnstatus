@@ -7,89 +7,28 @@
 
 from hnmodemstatus.hnmodemstatus import HnModemStatus
 from hngui.hngui import HnGui
+from hnoptions.options import HnOptions
+
 import os
 import argparse
 import ipaddress
-try:
-    import yaml
-except Exception:
-    print('Unable to import yaml to read configuration file')
-    yaml = None
 
 if __name__ == '__main__':
     # Get the directory of this file
     dir_path = os.path.dirname(os.path.realpath(__file__))
     glade_file = os.path.join(dir_path, 'hnstatus.glade')
     config_file = os.path.join(dir_path, 'config.yaml')
-    state_code_file = os.path.join(dir_path, 'statecodes.yaml')
+    statecode_file = os.path.join(dir_path, 'statecodes.yaml')
+    position_file = os.path.join(dir_path, 'position.yaml')
 
-    # The default colors
-    colors = {
-        'bonus_color': 'blue',
-        'anytime_color': 'green',
-        'ss_colors': ['black', 'fuchsia', 'gray'],
-        'tx_rx_colors': ['red', 'white'],
-        'background_color': 'white',
-    }
+    options = HnOptions(config_file=config_file,
+                        statecode_file=statecode_file,
+                        position_file=position_file)
 
-    # Default program options
-    program = {
-        'update_interval': 1000,
-        'IP': '192.168.0.1',
-        'auto_update': True,
-        'start_minimized': False,
-    }
-
-    # Read the configuration file
-    try:
-        loader = yaml.FullLoader
-    except AttributeError:
-        print('This version of Yaml does not support FullLoader.')
-        loader = None
-    try:
-        with open(config_file) as f:
-            if loader:
-                config = yaml.load(f, Loader=loader)
-            else:
-                config = yaml.load(f)
-        # Merge the colors from the yaml with the defaults
-        # yaml colors override the defaults.
-        try:
-            colors = {**colors, **config['colors']}
-        except KeyError:
-            print('No color information in config file')
-        try:
-            program = {**program, **config['program']}
-        except KeyError:
-            print('No program options in config file')
-    except FileNotFoundError:
-        print('Unable to open configuration file:', config_file)
-        config_file = None
-    except AttributeError:
-        config_file = None
-
-    try:
-        with open(state_code_file) as f:
-            if loader:
-                state_codes = yaml.load(f, Loader=yaml.FullLoader)
-            else:
-                state_codes = yaml.load(f)
-    except FileNotFoundError:
-        print('Unable to open statecodes file:', state_code_file)
-        state_codes = None
-    except AttributeError:
-        state_codes = None
-
-    try:
-        with open(state_code_file) as f:
-            if loader:
-                state_codes = yaml.load(f, Loader=yaml.FullLoader)
-            else:
-                state_codes = yaml.load(f)
-    except FileNotFoundError:
-        print('Unable to open statecodes file:', state_code_file)
-    except AttributeError:
-        pass
+    colors = options.colors
+    program = options.program_options
+    state_codes = options.statecodes
+    position = options.position
 
     # Get command line options
     # Command line colors override both default and yaml colors
@@ -156,15 +95,16 @@ if __name__ == '__main__':
                 ss_colors=args.ss_colors,
                 tx_rx_colors=args.tx_rx_colors,
                 background_color=args.background_color,
-                window_x=program['x_pos'],
-                window_y=program['y_pos'],
                 update_interval=program['update_interval'],
                 config_file=config_file,
                 hnstat=hn)
 
     # Restore saved position
-    if 'x_pos' in program and 'y_pos' in program:
-        gui.o.window1.move(program['x_pos'], program['y_pos'])
+    #if 'x_pos' in program and 'y_pos' in program:
+    #    gui.o.window1.move(program['x_pos'], program['y_pos'])
+    if position:
+        print('Moving', position)
+        gui.o.window1.move(position['x'], position['y'])
 
     # Display the GUI
     if not program['start_minimized']:
@@ -177,10 +117,6 @@ if __name__ == '__main__':
     # Run Gtk
     gui.gtk.main()
 
-    if config_file:
-        pos = gui.o.window1.get_position()
-        if config['program']['y_pos'] - pos.root_y:
-            config['program']['y_pos'] = pos.root_y + 5
-        config['program']['x_pos'] = pos.root_x
-        with open(config_file, "w") as f:
-            yaml.dump(config, f)
+    pos = gui.o.window1.get_position()
+    # May need to do root_y - 5
+    options.position = {'x': pos.root_x, 'y': pos.root_y}

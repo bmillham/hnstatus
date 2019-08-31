@@ -101,7 +101,7 @@ class HnGui():
             Notify.init('hnstatus-appindicator')
 
         self.update_interval = update_interval  # Update interval 1s
-        self.window1_coords = (True, window_x, window_y)
+        #self.window1_coords = (True, window_x, window_y)
 
     @property
     def o(self):
@@ -173,7 +173,7 @@ class HnGui():
     def show(self, widget):
         self.o.window1.deiconify()
         self.o.window1.set_visible(True)
-        self.o.window1.move(self.window1_coords[1], self.window1_coords[2])
+        #self.o.window1.move(self.window1_coords[1], self.window1_coords[2])
 
     def hide(self, widget):
         self.o.window1.set_visible(False)
