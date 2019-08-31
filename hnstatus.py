@@ -176,3 +176,11 @@ if __name__ == '__main__':
 
     # Run Gtk
     gui.gtk.main()
+
+    if config_file:
+        pos = gui.o.window1.get_position()
+        if config['program']['y_pos'] - pos.root_y:
+            config['program']['y_pos'] = pos.root_y + 5
+        config['program']['x_pos'] = pos.root_x
+        with open(config_file, "w") as f:
+            yaml.dump(config, f)
