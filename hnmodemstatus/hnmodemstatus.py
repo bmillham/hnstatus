@@ -77,7 +77,7 @@ class HnModemStatus:
         now = datetime.now()
         days_in_month = monthrange(now.year, now.month)[1]
         mins_in_month = days_in_month * 24 * 60
-        current_min = (now.day * 24 * 60) + (now.hour * 60) + now.minute
+        current_min = ((now.day - 1) * 24 * 60) + (now.hour * 60) + now.minute
         self.estimated_use = 100 - ((current_min / mins_in_month) * 100)
 
     def fetch_current_stats(self):
