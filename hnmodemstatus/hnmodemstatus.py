@@ -48,6 +48,7 @@ class HnModemStatus:
         self.state_codes = state_codes
         self.fap_codes = {0: 'OK',
                           1: 'Bonus',
+                          2: 'Unknown',
                           3: 'Throttled',
                           4: 'Not Associated'}
 
@@ -63,7 +64,7 @@ class HnModemStatus:
         error = None
 
         try:
-            json = requests.get(json_page, timeout=(0.1, .1)).json()
+            json = requests.get(json_page, timeout=(0.45, .45)).json()
         except ConnectionError:
             error = 'Connection Error'
         except OSError:

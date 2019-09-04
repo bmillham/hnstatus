@@ -15,6 +15,7 @@ except (ImportError, ValueError):
     print('Notifications will not be displayed.')
     Notify = None
 
+
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
@@ -77,7 +78,7 @@ class HnGui():
                     "Signal Strength: {}",
                     "Anytime Remaining: {} ({:.02f}%)",
                     "Bonus Remaining: {} ({:.02f}%)",
-                    "Estimated: {:.02f}%"]
+                    "Estimated: {:.04f}%"]
         self.tooltip_template = '\n'.join(template)
         self.bonus_color = bonus_color
         self.anytime_color = anytime_color
@@ -151,6 +152,7 @@ class HnGui():
         """ Exit the program """
 
         # pylint: disable=no-self-use, unused-argument
+        print('Quit', self.o.window1.get_position())
         if Notify:
             Notify.uninit()
         self.gtk.main_quit()
@@ -176,6 +178,7 @@ class HnGui():
         #self.o.window1.move(self.window1_coords[1], self.window1_coords[2])
 
     def hide(self, widget):
+        print('hide', self.o.window1.get_position())
         self.o.window1.set_visible(False)
 
     def set_icon(self):
@@ -251,7 +254,7 @@ class HnGui():
         else:
             self.o.down_image.set_from_pixbuf(
                 self.o.down_on_image.get_pixbuf())
-        self.o.estimated_label.set_text("{:.02f}%".format(
+        self.o.estimated_label.set_text("{:.04f}%".format(
             self.hnstat.estimated_use))
         self.set_icon()
 
