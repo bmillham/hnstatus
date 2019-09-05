@@ -102,10 +102,8 @@ class HnOptions(object):
             self._position = self._load_yaml(self.position_file)
         return self._position
 
-
     @position.setter
     def position(self, x):
-        print('Save position', x)
         if not yaml:
             print('Unable to save window position')
             return

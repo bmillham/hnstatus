@@ -12,6 +12,7 @@ from hnoptions.options import HnOptions
 import os
 import argparse
 import ipaddress
+from collections import namedtuple
 
 if __name__ == '__main__':
     # Get the directory of this file
@@ -28,7 +29,12 @@ if __name__ == '__main__':
     colors = options.colors
     program = options.program_options
     state_codes = options.statecodes
-    position = options.position
+    Position = namedtuple('Position', 'root_x root_y')
+    oposition = options.position
+    if oposition:
+        position = Position(root_x=oposition[0], root_y=oposition[1])
+    else:
+        position = None
 
     # Get command line options
     # Command line colors override both default and yaml colors
@@ -97,14 +103,12 @@ if __name__ == '__main__':
                 background_color=args.background_color,
                 update_interval=program['update_interval'],
                 config_file=config_file,
+                start_position=position,
                 hnstat=hn)
 
     # Restore saved position
-    #if 'x_pos' in program and 'y_pos' in program:
-    #    gui.o.window1.move(program['x_pos'], program['y_pos'])
     if position:
-        print('Moving', position)
-        gui.o.window1.move(position['x'], position['y'])
+        gui.o.window1.move(position.root_x, position.root_y)
 
     # Display the GUI
     if not program['start_minimized']:
@@ -119,4 +123,5 @@ if __name__ == '__main__':
 
     pos = gui.o.window1.get_position()
     # May need to do root_y - 5
-    options.position = {'x': pos.root_x, 'y': pos.root_y}
+
+    options.position = gui.saved_window_position

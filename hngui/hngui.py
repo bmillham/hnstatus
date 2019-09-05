@@ -35,9 +35,8 @@ class HnGui():
                  ss_colors=None,
                  tx_rx_colors=None,
                  background_color=None,
-                 window_x=0,
-                 window_y=0,
                  config_file=None,
+                 start_position=None,
                  update_interval=1000):
         """ Create the GUI, but do not display it """
 
@@ -46,6 +45,7 @@ class HnGui():
             'on_auto_refresh_button_toggled': self.toggle_refresh,
             'populate': self.populate,
             'window_state_event': self.window_state_event,
+            'on_check_resize_event': self.resize_event,
             'about_item': self.about,
             'about-close-handler': self.about_close_handler,
             'set-tooltip': self._set_tooltip,
@@ -57,6 +57,7 @@ class HnGui():
         self.hnstat = hnstat
         self.auto_update_source = None
         self.config_file = config_file
+        self.first_resize = True
 
         self.gtk = Gtk
         self.__o = AttrDict()
@@ -88,6 +89,7 @@ class HnGui():
         self.highlight_color = Gdk.RGBA()
         self.highlight_color.parse('red')
         self.normal_color = None
+        self.saved_window_position = start_position
 
         # Setup the StatusIcon
 
@@ -136,9 +138,23 @@ class HnGui():
                               button,
                               time)
 
+    def resize_event(self, w):
+        if self.first_resize:
+            self.o.window1.move(self.saved_window_position.root_x,
+                                self.saved_window_position.root_y)
+            self.first_resize = False
+            return
+
+        p = self.o.window1.get_position()
+        if p != self.saved_window_position:
+            self.saved_window_position = p
+
     def window_state_event(self, w, s):
         if 'iconified' in s.new_window_state.value_nicks:
+            p = w.get_position()
             w.set_visible(False)
+            w.move(p.root_x, p.root_y)
+            self.saved_window_position = p
 
     def button_press_event(self, icon, button):
         b = button.get_button()[1]
@@ -152,7 +168,6 @@ class HnGui():
         """ Exit the program """
 
         # pylint: disable=no-self-use, unused-argument
-        print('Quit', self.o.window1.get_position())
         if Notify:
             Notify.uninit()
         self.gtk.main_quit()
@@ -175,11 +190,15 @@ class HnGui():
     def show(self, widget):
         self.o.window1.deiconify()
         self.o.window1.set_visible(True)
-        #self.o.window1.move(self.window1_coords[1], self.window1_coords[2])
+
+        self.o.window1.move(self.saved_window_position.root_x,
+                            self.saved_window_position.root_y)
 
     def hide(self, widget):
-        print('hide', self.o.window1.get_position())
+        p = self.o.window1.get_position()
         self.o.window1.set_visible(False)
+        self.o.window1.move(p.root_x, p.root_y)
+        self.saved_window_position = p
 
     def set_icon(self):
         if not self.icon:
