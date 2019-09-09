@@ -4,5 +4,4 @@ colors:
   bonus_color: blue
   ss_colors: [black, fuchsia, gray]
   tx_rx_colors: ['#ff0000', white]
-program: {IP: 192.168.0.1, auto_update: true, start_minimized: false, update_interval: 1000,
-  x_pos: 1560, y_pos: 818}
+program: {IP: 192.168.0.1, auto_update: true, start_minimized: false, update_interval: 1000, enable_logging: db.db}

@@ -106,6 +106,9 @@ class HnGui():
         if Notify:
             Notify.init('hnstatus-appindicator')
 
+        self.hnstat.fetch_current_stats()
+        self.hnstat.fetch_sys_info()
+
         if self.enable_logging:
             self.log = Log(self.enable_logging, commit_after=60)
             if not self.log.database:
@@ -114,8 +117,6 @@ class HnGui():
                 print("Logging usage information to: {}".format(
                     self.enable_logging))
                 self.log.open()
-                self.hnstat.fetch_current_stats()
-                self.hnstat.fetch_sys_info()
                 self.log.addsysinfo(self.hnstat.system_info,
                                     self.hnstat._anytime_allowance_bytes,
                                     self.hnstat._bonus_allowance_bytes)
