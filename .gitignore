@@ -47,3 +47,5 @@ hnlog/\.#logging\.py
 *.db
 
 *.db-journal
+
+read_db\.py
