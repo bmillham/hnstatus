@@ -22,6 +22,16 @@ class HnModemStatus:
         self.usage = "http://{}/api/home/usage".format(ip)
         self.association = "http://{}/api/home/status/association".format(ip)
 
+        # These pages get modem/system information
+        # This data should not normally change, so is only read
+        # on statup.
+        self.syspages = {
+            'id': "http://{}/api/home/information/identification".format(ip),
+            'terminal': "http://{}/api/system/terminal_info".format(ip),
+            'gen_info': "http://{}/api/system/wifi/gen_info".format(ip),
+            'sat_info': "http://{}/api/home/information/satellite".format(ip),
+            'lan': "http://{}/api/system/wifi/lan".format(ip)}
+
         self._status = None
         self._data_remaining = None
         self._anytime_allowance = None
@@ -58,6 +68,9 @@ class HnModemStatus:
                 '24.1.1': 'Download throttled',
                 'unknown': ''}
 
+        # On statup, get static system information
+        self.fetch_sys_info()
+
     def get_json(self, json_page=None):
         """ Read a json page and handle errors """
         json = None
@@ -73,6 +86,11 @@ class HnModemStatus:
             error = 'Other Error'
 
         return json, error
+
+    def fetch_sys_info(self):
+        self.system_info = {}
+        for page in self.syspages:
+            self.system_info[page] = self.get_json(self.syspages[page])[0]
 
     def _get_estimated_use(self):
         now = datetime.now()
@@ -351,3 +369,16 @@ class HnModemStatus:
             return 'Unknown'
         return str(self._wan['sat_rx_ss'])
 
+    @property
+    def last_tx_raw(self):
+        try:
+            return int(self._last_tx)
+        except:
+            return 0
+
+    @property
+    def last_rx_raw(self):
+        try:
+            return int(self._last_rx)
+        except:
+            return 0

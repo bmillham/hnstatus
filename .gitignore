@@ -39,3 +39,13 @@ config.yaml
 
 
 hngui/\*vc-log\*
+
+*.sq3
+
+hnlog/\.#logging\.py
+
+*.db
+
+*.db-journal
+
+read_db\.py

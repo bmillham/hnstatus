@@ -31,6 +31,7 @@ if __name__ == '__main__':
     state_codes = options.statecodes
     Position = namedtuple('Position', 'root_x root_y')
     oposition = options.position
+
     if oposition:
         position = Position(root_x=oposition[0], root_y=oposition[1])
     else:
@@ -104,6 +105,7 @@ if __name__ == '__main__':
                 update_interval=program['update_interval'],
                 config_file=config_file,
                 start_position=position,
+                enable_logging=program['enable_logging'],
                 hnstat=hn)
 
     # Restore saved position
