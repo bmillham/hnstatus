@@ -106,6 +106,12 @@ class HnGui():
 
         self.log = Log('db.db', commit_after=60)
         self.log.open()
+        self.hnstat.fetch_current_stats()
+        self.hnstat.fetch_sys_info()
+        self.log.addsysinfo(self.hnstat.system_info,
+                            self.hnstat._anytime_allowance_bytes,
+                            self.hnstat._bonus_allowance_bytes)
+
         self.update_interval = update_interval  # Update interval 1s
 
     @property

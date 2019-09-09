@@ -30,6 +30,38 @@ class Log(object):
                anytime INTEGER, bonus INTEGER,
                association STRING, fap STRING);"""
         self.execute(s)
+        # Create table to store modem information
+        s = """CREATE TABLE IF NOT EXISTS
+               sysinfo(date DATETIME PRIMARY KEY,
+               anytime_allowance INTEGER,
+               bonus_allowance INTEGER,
+               cpn STRING,
+               mac_addr STRING,
+               rpn STRING,
+               rsn STRING,
+               sernum STRING,
+               mbpartno STRING,
+               cores INTEGER,
+               bldyear INTEGER,
+               boardtype STRING,
+               code STRING,
+               esn STRING,
+               fallbackvers STRING,
+               wifi STRING,
+               memtotal INTEGER,
+               nspdisplayname STRING,
+               sai STRING,
+               san STRING,
+               sdlwifivers STRING,
+               wifivers STRING,
+               wifimodvers STRING,
+               fwvers STRING,
+               beamid INTEGER,
+               gatewayid INTEGER,
+               orid INTEGER,
+               satname STRING,
+               lanaddr STRING);"""
+        self.execute(s)
 
     def execute(self, sql, params=None, commit=True):
         if params:
@@ -48,6 +80,42 @@ class Log(object):
     def close(self):
         self.connection.commit()
         self.connection.close()
+
+    def addsysinfo(self, si=None, anytime=0, bonus=0):
+        if not si:
+            print("No sysinfo to log")
+            return
+        now = datetime.now()
+        s = """INSERT INTO sysinfo(date, anytime_allowance, bonus_allowance,
+               cpn, mac_addr, rpn, rsn, sernum, mbpartno, cores, bldyear,
+               boardtype, code, esn, fallbackvers, memtotal,
+               nspdisplayname, sai, san, sdlwifivers, wifivers, fwvers,
+               beamid, gatewayid, orid, satname, lanaddr) VALUES
+               (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+               ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+        self.execute(s, params=(now, anytime, bonus, si['id']['cpn'],
+                                si['id']['mac_addr'], si['id']['rpn'],
+                                si['id']['rsn'],
+                                si['terminal']['FactorySerNum'],
+                                si['terminal']['MotherBoardPN'],
+                                si['terminal']['active_cores'],
+                                si['terminal']['bld_year'],
+                                si['terminal']['board_type'],
+                                si['terminal']['code'],
+                                si['terminal']['esn'],
+                                si['terminal']['fallback_version'],
+                                si['terminal']['memory_total_kb'],
+                                si['terminal']['nsp_display_name'],
+                                si['terminal']['sai'], si['terminal']['san'],
+                                si['terminal']['sdl_wifi_sw_version'],
+                                si['terminal']['version'],
+                                si['terminal']['wifi_module_sw_version'],
+                                si['sat_info']['beam_id'],
+                                si['sat_info']['gateway_id'],
+                                si['sat_info']['or_id'],
+                                si['sat_info']['sat_name'],
+                                si['lan']['addr']))
+        self.connection.commit()
 
     def adddata(self, status=None):
         if not status:
