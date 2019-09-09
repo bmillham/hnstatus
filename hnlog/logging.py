@@ -1,15 +1,22 @@
 """ Log usage and status information to a sqlite3 database """
 
-import sqlite3
+try:
+    import sqlite3
+except ModuleNotFoundError:
+    print('Module sqlite3 not found. Logging is disabled.')
+    sqlite3 = None
+
 from datetime import datetime
-#from sqlite import Error
 
 
 class Log(object):
     """ Log class based on sqlite3 """
 
     def __init__(self, database=None, commit_after=0, ro=False):
-        self.database = database
+        if not sqlite3:
+            self.database = None
+        else:
+            self.database = database
         self.commit_count = self.commit_after = commit_after
         self.ro = ro
 

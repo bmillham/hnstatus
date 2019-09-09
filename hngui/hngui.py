@@ -38,7 +38,8 @@ class HnGui():
                  background_color=None,
                  config_file=None,
                  start_position=None,
-                 update_interval=1000):
+                 update_interval=1000,
+                 enable_logging=None):
         """ Create the GUI, but do not display it """
 
         signals = {
@@ -91,6 +92,7 @@ class HnGui():
         self.highlight_color.parse('red')
         self.normal_color = None
         self.saved_window_position = start_position
+        self.enable_logging = enable_logging
 
         # Setup the StatusIcon
 
@@ -104,13 +106,21 @@ class HnGui():
         if Notify:
             Notify.init('hnstatus-appindicator')
 
-        self.log = Log('db.db', commit_after=60)
-        self.log.open()
-        self.hnstat.fetch_current_stats()
-        self.hnstat.fetch_sys_info()
-        self.log.addsysinfo(self.hnstat.system_info,
-                            self.hnstat._anytime_allowance_bytes,
-                            self.hnstat._bonus_allowance_bytes)
+        if self.enable_logging:
+            self.log = Log(self.enable_logging, commit_after=60)
+            if not self.log.database:
+                self.enable_logging = False
+            else:
+                print("Logging usage information to: {}".format(
+                    self.enable_logging))
+                self.log.open()
+                self.hnstat.fetch_current_stats()
+                self.hnstat.fetch_sys_info()
+                self.log.addsysinfo(self.hnstat.system_info,
+                                    self.hnstat._anytime_allowance_bytes,
+                                    self.hnstat._bonus_allowance_bytes)
+        else:
+            self.log = None
 
         self.update_interval = update_interval  # Update interval 1s
 
@@ -295,7 +305,8 @@ class HnGui():
             self.hnstat.bonus_percent_remaining,
             self.hnstat.estimated_use))
 
-        self.log.adddata(h)
+        if self.enable_logging:
+            self.log.adddata(h)
 
         # Notify about connection errors.
         if self.hnstat.status_raw and Notify:

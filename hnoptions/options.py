@@ -12,8 +12,8 @@ else:
         print('This version of Yaml does not support FullLoader.')
         loader = None
 
+
 class HnOptions(object):
-    
     def __init__(self,
                  config_file=None,
                  statecode_file=None,
@@ -37,6 +37,7 @@ class HnOptions(object):
             'IP': '192.168.0.1',
             'auto_update': True,
             'start_minimized': False,
+            'enable_logging': False
         }
 
         self._config = {}
