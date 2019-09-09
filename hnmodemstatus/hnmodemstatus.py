@@ -351,3 +351,16 @@ class HnModemStatus:
             return 'Unknown'
         return str(self._wan['sat_rx_ss'])
 
+    @property
+    def last_tx_raw(self):
+        try:
+            return int(self._last_tx)
+        except:
+            return 0
+
+    @property
+    def last_rx_raw(self):
+        try:
+            return int(self._last_rx)
+        except:
+            return 0

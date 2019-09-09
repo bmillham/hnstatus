@@ -4,7 +4,8 @@ import gi
 
 gi.require_version('Gtk', '3.0')
 
-from hngui.icon import Icon  # noqa: E402
+from .icon import Icon  # noqa: E402
+from hnlog.logging import Log  # noqa: E402
 from gi.repository import Gtk, GObject, Gdk  # noqa: E402
 
 try:
@@ -103,8 +104,9 @@ class HnGui():
         if Notify:
             Notify.init('hnstatus-appindicator')
 
+        self.log = Log('db.db', commit_after=60)
+        self.log.open()
         self.update_interval = update_interval  # Update interval 1s
-        #self.window1_coords = (True, window_x, window_y)
 
     @property
     def o(self):
@@ -286,6 +288,9 @@ class HnGui():
             self.hnstat.bonus_remaining,
             self.hnstat.bonus_percent_remaining,
             self.hnstat.estimated_use))
+
+        self.log.adddata(h)
+
         # Notify about connection errors.
         if self.hnstat.status_raw and Notify:
             if self.hnstat.status_raw != self._last_status_warning:
