@@ -28,7 +28,7 @@ class HnModemStatus:
         self.syspages = {
             'id': "http://{}/api/home/information/identification".format(ip),
             'terminal': "http://{}/api/system/terminal_info".format(ip),
-            'gen_info': "http://{}/api/system/wifi/gen_info".format(ip),
+            #'gen_info': "http://{}/api/system/wifi/gen_info".format(ip),
             'sat_info': "http://{}/api/home/information/satellite".format(ip),
             'lan': "http://{}/api/system/wifi/lan".format(ip)}
 

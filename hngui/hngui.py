@@ -52,7 +52,7 @@ class HnGui():
             'about-close-handler': self.about_close_handler,
             'set-tooltip': self._set_tooltip,
             'popup-menu': self.right_click_event,
-            'button-press-event': self.button_press_event
+            'button-press-event': self.button_press_event,
         }
 
         self._last_status_warning = None
@@ -108,6 +108,18 @@ class HnGui():
 
         self.hnstat.fetch_current_stats()
         self.hnstat.fetch_sys_info()
+        print(self.hnstat.system_info)
+        so = self.hnstat.system_info
+        self.o.sat_name_lbl.set_text(so['sat_info']['sat_name'])
+        self.o.beam_id_lbl.set_text(str(so['sat_info']['beam_id']))
+        self.o.gateway_id_lbl.set_text(str(so['sat_info']['gateway_id']))
+        self.o.or_id_lbl.set_text(str(so['sat_info']['or_id']))
+        self.o.san_lbl.set_text(so['terminal']['san'])
+        self.o.esn_lbl.set_text(str(so['terminal']['esn']))
+        self.o.diag_lbl.set_text(so['terminal']['code'])
+        self.o.app_software_lbl.set_text(so['terminal']['version'])
+        self.o.fallback_software_lbl.set_text(so['terminal']['fallback_version'])
+        self.o.wifi_software_lbl.set_text(so['terminal']['wifi_module_sw_version'])
 
         if self.enable_logging:
             self.log = Log(self.enable_logging, commit_after=60)
