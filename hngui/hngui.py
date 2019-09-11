@@ -107,19 +107,8 @@ class HnGui():
             Notify.init('hnstatus-appindicator')
 
         self.hnstat.fetch_current_stats()
-        self.hnstat.fetch_sys_info()
-        print(self.hnstat.system_info)
-        so = self.hnstat.system_info
-        self.o.sat_name_lbl.set_text(so['sat_info']['sat_name'])
-        self.o.beam_id_lbl.set_text(str(so['sat_info']['beam_id']))
-        self.o.gateway_id_lbl.set_text(str(so['sat_info']['gateway_id']))
-        self.o.or_id_lbl.set_text(str(so['sat_info']['or_id']))
-        self.o.san_lbl.set_text(so['terminal']['san'])
-        self.o.esn_lbl.set_text(str(so['terminal']['esn']))
-        self.o.diag_lbl.set_text(so['terminal']['code'])
-        self.o.app_software_lbl.set_text(so['terminal']['version'])
-        self.o.fallback_software_lbl.set_text(so['terminal']['fallback_version'])
-        self.o.wifi_software_lbl.set_text(so['terminal']['wifi_module_sw_version'])
+        self.populate_modem_info()
+        
 
         if self.enable_logging:
             self.log = Log(self.enable_logging, commit_after=60)
@@ -257,6 +246,33 @@ class HnGui():
         if txt == 'OK':
             txt = None
         widget.set_tooltip_text(txt)
+
+    def populate_modem_info(self):
+        self.hnstat.fetch_sys_info()
+        print(self.hnstat.system_info)
+        o = self.o
+        si = self.hnstat.system_info
+        o.sat_name_lbl.set_text(si['sat_info']['sat_name'])
+        o.beam_id_lbl.set_text(str(si['sat_info']['beam_id']))
+        o.gateway_id_lbl.set_text(str(si['sat_info']['gateway_id']))
+        o.or_id_lbl.set_text(str(si['sat_info']['or_id']))
+        o.san_lbl.set_text(si['terminal']['san'])
+        o.esn_lbl.set_text(str(si['terminal']['esn']))
+        o.diag_lbl.set_text(si['terminal']['code'])
+        o.app_software_lbl.set_text(si['terminal']['version'])
+        o.fallback_software_lbl.set_text(si['terminal']['fallback_version'])
+        o.wifi_software_lbl.set_text(si['terminal']['wifi_module_sw_version'])
+        o.mac_addr_lbl.set_text(si['id']['mac_addr'])
+        o.cpn_lbl.set_text(si['id']['cpn'])
+        o.rpn_lbl.set_text(si['id']['rpn'])
+        o.rsn_lbl.set_text(si['id']['rsn'])
+        o.sn_lbl.set_text(si['terminal']['FactorySerNum'])
+        o.bpn_lbl.set_text(si['terminal']['MotherBoardPN'])
+        o.cores_lbl.set_text(str(si['terminal']['active_cores']))
+        o.bt_lbl.set_text(si['terminal']['board_type'])
+        o.esn_lbl.set_text(str(si['terminal']['esn']))
+        o.year_lbl.set_text(str(si['terminal']['bld_year']))
+        o.totmem_lbl.set_text(str(si['terminal']['memory_total_kb']))
 
     def populate(self, force=False):
         """ Populate the GUI with the current status """
